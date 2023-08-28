@@ -20,7 +20,8 @@ function App() {
             {title: 'KYC', href: '/kyc'},
             {title: 'TM Alerts', href: '/tm-alerts'},
             {title: 'Customer Risk', href: '/customer-risk'},
-            {title: 'RTC-QC', href: '/rtc-qc'},
+            {title: 'RTC - QC', href: '/rtc-qc'},
+            {title: 'Tax - CLM', href: '/tax-clm'},
             {title: 'Tax - GTM', href: '/tax-gtm'},
             {title: 'Utilities', href: '/utilities'},
         ]
@@ -35,6 +36,7 @@ function App() {
                 <Route path="/tm-alerts" element={<Dummy content="TM Alerts" />} />
                 <Route path="/customer-risk" element={<Dummy content="Customer Risk" />} />
                 <Route path="/rtc-qc" element={<Dummy content="RTC-QC" />} />
+                <Route path="/tax-clm" element={<Dummy content="Tax-CLM" />} />
                 <Route path="/tax-gtm" element={<Dummy content="Tax-GTM" />} />
                 <Route path="/utilities" element={<Dummy content="Utilities" />} />
                 <Route path="*" element={<NotFound />} />

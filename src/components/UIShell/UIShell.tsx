@@ -1,17 +1,24 @@
 import React from "react";
 import {
-    HeaderContainer, Header, SkipToContent, HeaderMenuButton, HeaderName,
-    HeaderNavigation, HeaderMenu, HeaderMenuItem, HeaderGlobalBar,
-    HeaderGlobalAction, SideNav, SideNavItems, Content,
-    SideNavMenu, SideNavMenuItem, Theme
+    Content,
+    Header,
+    HeaderContainer,
+    HeaderGlobalAction,
+    HeaderGlobalBar,
+    HeaderMenu,
+    HeaderMenuButton,
+    HeaderMenuItem,
+    HeaderName,
+    HeaderNavigation,
+    SideNav,
+    SideNavItems,
+    SideNavMenu,
+    SideNavMenuItem,
+    SkipToContent,
+    Theme
 } from '@carbon/react';
-import {
-    Notification,
-    Search,
-    Switcher,
-    Fade,
-} from '@carbon/icons-react';
-import { BrowserRouter, Link } from 'react-router-dom';
+import {Fade,} from '@carbon/icons-react';
+import {BrowserRouter, Link} from 'react-router-dom';
 
 import {ErrorBoundary} from "../ErrorBoundary";
 import {isMenuItemModel, MenuModel, NavigationModel} from "../../models";
