@@ -14,7 +14,7 @@ import {
 import { BrowserRouter, Link } from 'react-router-dom';
 
 import {ErrorBoundary} from "../ErrorBoundary";
-import {isMenuItemModel, isMenuLinkModel, MenuModel, NavigationModel} from "../../models";
+import {isMenuItemModel, MenuModel, NavigationModel} from "../../models";
 
 export interface UIShellProps {
     prefix: string
@@ -103,43 +103,6 @@ export class UIShell extends React.Component<UIShellProps, UIShellState> {
                 {item.items.map(childItem => this.renderSideNavItem(childItem))}
             </SideNavMenu>
         )
-
-        /*
-                            <SideNavMenuItem element={Link} to='/'
-                                     isActive={this.state.activeItem === '/'}
-                                     onClick={() => { this.setState({ activeItem: '/' }) }}>
-                        Overview
-                    </SideNavMenuItem>
-                    <SideNavMenu renderIcon={Fade} title="Inventory" defaultExpanded>
-                        <SideNavMenuItem element={Link} to='/inventory/items'
-                                         isActive={this.state.activeItem === '/inventory/items'}
-                                         onClick={() => { this.setState({ activeItem: '/inventory/items' }) }}>
-                            Items
-                        </SideNavMenuItem>
-                    </SideNavMenu>
-                    <SideNavMenu renderIcon={Fade} title="Management">
-                        <SideNavMenuItem href="#">
-                            Link
-                        </SideNavMenuItem>
-                        <SideNavMenuItem href="#">
-                            Link
-                        </SideNavMenuItem>
-                        <SideNavMenuItem href="#">
-                            Link
-                        </SideNavMenuItem>
-                    </SideNavMenu>
-                    <SideNavMenu
-                        renderIcon={Fade}
-                        title="Docs">
-                        <SideNavMenuItem href="#">
-                            Link
-                        </SideNavMenuItem>
-                        <SideNavMenuItem href="#">
-                            Link
-                        </SideNavMenuItem>
-                    </SideNavMenu>
-
-         */
     }
 
     renderSideNav(isSideNavExpanded: boolean) {
