@@ -16,10 +16,9 @@ export default defineConfig({
         changeOrigin: true,
         rewrite: (path) => path.replace(/^\/api/, ''),
       },
-      '/socket': {
+      '/graphql': {
         target: socketTarget,
         ws: true,
-        rewrite: (path) => path.replace(/^\/socket/, '')
       },
     },
   },

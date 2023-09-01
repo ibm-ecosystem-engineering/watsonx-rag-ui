@@ -20,6 +20,7 @@ import {
 import {Fade,} from '@carbon/icons-react';
 import {BrowserRouter, Link} from 'react-router-dom';
 
+import './UIShell.scss';
 import {ErrorBoundary} from "../ErrorBoundary";
 import {isMenuItemModel, MenuModel, NavigationModel} from "../../models";
 
@@ -32,10 +33,6 @@ export interface UIShellProps {
 
 export interface UIShellState {
     activeItem: string
-}
-
-const isEmpty = (arr?: unknown[]) => {
-    return !arr || arr.length === 0
 }
 
 export class UIShell extends React.Component<UIShellProps, UIShellState> {
@@ -142,7 +139,7 @@ export class UIShell extends React.Component<UIShellProps, UIShellState> {
                                         isActive={isSideNavExpanded}
                                     />
                                     <HeaderName href="#" prefix={this.props.prefix}>
-                                        {this.props.title}
+                                        &nbsp;{this.props.title}
                                     </HeaderName>
                                     {this.renderHeaderNavigation()}
                                     {this.renderGlobalBar()}

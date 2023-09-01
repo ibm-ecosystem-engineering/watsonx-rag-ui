@@ -1,1 +1,6 @@
 export * from './Dashboard'
+export * from './Utilities'
+export * from './TaxCLM'
+export * from './RTCQC'
+export * from './CustomerRisk'
+export * from './KYC'

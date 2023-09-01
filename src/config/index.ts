@@ -1,0 +1,2 @@
+
+export * from './menu-config';
