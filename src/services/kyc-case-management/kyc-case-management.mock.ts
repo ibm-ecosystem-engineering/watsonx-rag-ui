@@ -14,7 +14,7 @@ const initialValue: KycCaseModel[] = [
             countryOfResidence: 'US'
         },
         status: 'New',
-        documents: [],
+        documents: [{id: '1', name: 'Invoice-2023-01.pdf', path: 'Invoice-2023-01.pdf'}],
         comments: [],
     },
     {
@@ -72,7 +72,9 @@ export class KycCaseManagementMock implements KycCaseManagementApi {
 
         currentCase.status = 'Pending';
 
-        currentCase.documents.push({name: documentName, path: documentPath});
+        const documentId = currentCase.documents.length + 1;
+
+        currentCase.documents.push({id: `${id}-${documentId}`, name: documentName, path: documentPath});
 
         this.subject.next(this.subject.value);
 

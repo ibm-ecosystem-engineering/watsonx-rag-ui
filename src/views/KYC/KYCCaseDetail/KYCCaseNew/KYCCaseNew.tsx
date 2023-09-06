@@ -2,7 +2,7 @@
 // @ts-ignore
 import React, {ChangeEvent, useState} from 'react';
 import {useNavigate} from "react-router-dom";
-import {Button, DatePicker, DatePickerInput, Form, Select, SelectItem, TextInput} from "@carbon/react";
+import {Button, DatePicker, DatePickerInput, FileUploader, Form, Select, SelectItem, TextInput} from "@carbon/react";
 import {Stack} from "@carbon/react/lib/components/Stack"
 import {default as setValue} from 'set-value';
 import {useAtomValue} from "jotai";
@@ -81,6 +81,18 @@ export const KYCCaseNew: React.FunctionComponent<KYCCaseNewProps> = (props: KYCC
                 >
                     {countries.map(option => <SelectItem key={option.value} text={option.text} value={option.value} />)}
                 </Select>
+                <FileUploader
+                    labelTitle="Add documents"
+                    labelDescription="Max file size is 500mb."
+                    buttonLabel="Add file"
+                    buttonKind="primary"
+                    size="md"
+                    filenameStatus="edit"
+                    // accept={['.jpg', '.png', '.pdf']}
+                    multiple={true}
+                    disabled={false}
+                    iconDescription="Delete file"
+                    name="" />
                 <div><Button kind="tertiary" onClick={handleCancel}>Cancel</Button> <Button type="submit">Submit</Button></div>
             </Stack>
         </Form>

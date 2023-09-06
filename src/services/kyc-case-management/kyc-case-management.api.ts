@@ -3,7 +3,7 @@ import {Observable} from "rxjs";
 
 export abstract class KycCaseManagementApi {
     abstract listCases(): Promise<KycCaseModel[]>;
-    abstract subscribeToCases(): Observable<KycCaseModel[]>;
+    abstract subscribeToCases(skipQuery?: boolean): Observable<KycCaseModel[]>;
 
     abstract getCase(id: string): Promise<KycCaseModel>;
     abstract createCase(customer: CustomerModel): Promise<KycCaseModel>;

@@ -1,0 +1,52 @@
+"""KYC Customer"""
+type Customer {
+  name: String!
+  dateOfBirth: String!
+  countryOfResidence: String!
+}
+
+"""KYC Document"""
+type Document {
+  id: ID!
+  name: String!
+  path: String!
+}
+
+"""Case comment"""
+type Comment {
+  id: ID!
+  comment: String!
+  timestamp: String!
+  author: String
+}
+
+"""KYC Case"""
+type KycCase {
+  id: ID!
+  status: String!
+  customer: Customer!
+  documents: [Document!]!
+  comments: [Comment!]!
+}
+
+type Query {
+  listCases: [KycCase!]!
+  getCase(id: ID!): KycCase!
+}
+
+type Mutation {
+  createCase(customer: CustomerInput!): KycCase!
+  addDocumentToCase(caseId: ID!, documentName: String!, documentPath: String!): KycCase!
+  reviewCase(caseId: ID!, comment: String, timestamp: String, author: String): KycCase!
+  approveCase(caseId: ID!, comment: String, timestamp: String, author: String): KycCase!
+}
+
+input CustomerInput {
+  name: String!
+  dateOfBirth: String!
+  countryOfResidence: String!
+}
+
+type Subscription {
+  subscribeToCases: [KycCase!]!
+}

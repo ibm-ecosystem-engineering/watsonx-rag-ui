@@ -21,6 +21,7 @@ export interface CustomerModel {
 }
 
 export interface DocumentModel {
+    id: string;
     name: string;
     path: string;
 }
@@ -58,6 +59,6 @@ export const createEmptyCustomer = (): CustomerModel => {
     return {
         name: '',
         dateOfBirth: new Date().toISOString(),
-        countryOfResidence: '',
+        countryOfResidence: 'US',
     }
 }

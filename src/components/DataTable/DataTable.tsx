@@ -20,11 +20,12 @@ import './DataTable.scss';
 export interface DataTableProps<ColType extends any[]> {
     headerData: DataTableHeader[];
     rowData: Array<Omit<DataTableRow<ColType>, 'cells'>>;
-    onRowClick: (id: string) => void;
+    onRowClick?: (id: string) => void;
 }
 
 export const DataTable: React.FunctionComponent<DataTableProps<any[]>> = <ColType extends any[],> (props: DataTableProps<ColType>) => {
 
+    const onRowClick = props.onRowClick || (() => {return});
     return (
         <InnerDataTable rows={props.rowData} headers={props.headerData} isSortable>
             {({ rows, headers, getHeaderProps, getTableProps }) => (
@@ -41,7 +42,7 @@ export const DataTable: React.FunctionComponent<DataTableProps<any[]>> = <ColTyp
                         </TableHead>
                         <TableBody>
                             {rows.map((row) => (
-                                <TableRow key={row.id} onClick={() => props.onRowClick(row.id)}>
+                                <TableRow key={row.id} onClick={() => onRowClick(row.id)}>
                                     {row.cells.map((cell) => (
                                         <TableCell key={cell.id}>{cell.value}</TableCell>
                                     ))}

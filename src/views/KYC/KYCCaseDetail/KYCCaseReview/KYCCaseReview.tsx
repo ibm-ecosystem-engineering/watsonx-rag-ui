@@ -4,12 +4,13 @@
 import React from 'react';
 import {useNavigate} from "react-router-dom";
 import {useAtomValue} from "jotai";
+import {Button, DatePicker, DatePickerInput, FileUploader, Select, SelectItem, TextInput} from "@carbon/react";
 import {Stack} from "@carbon/react/lib/components/Stack"
 
 import {countriesAtomLoadable} from "../../../../atoms";
+import {DocumentList} from "../../../../components";
 import {KycCaseModel} from "../../../../models";
 import {kycCaseManagementApi} from "../../../../services";
-import {Button, DatePicker, DatePickerInput, Select, SelectItem, TextInput} from "@carbon/react";
 
 export interface KYCCaseReviewProps {
     currentCase: KycCaseModel;
@@ -68,6 +69,19 @@ export const KYCCaseReview: React.FunctionComponent<KYCCaseReviewProps> = (props
             >
                 {countries.map(option => <SelectItem key={option.value} text={option.text} value={option.value} />)}
             </Select>
+            <DocumentList documents={props.currentCase.documents} />
+            <FileUploader
+                labelTitle="Add documents"
+                labelDescription="Max file size is 500mb."
+                buttonLabel="Add file"
+                buttonKind="primary"
+                size="md"
+                filenameStatus="edit"
+                // accept={['.jpg', '.png', '.pdf']}
+                multiple={true}
+                disabled={false}
+                iconDescription="Delete file"
+                name="" />
             <div><Button kind="tertiary" onClick={handleCancel}>Cancel</Button> <Button type="submit" onClick={handleSubmit}>Submit</Button></div>
         </Stack>
     )
