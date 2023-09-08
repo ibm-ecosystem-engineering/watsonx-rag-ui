@@ -4,14 +4,12 @@ import React from 'react';
 import { useNavigate } from "react-router-dom";
 import {Button, DataTableHeader} from "@carbon/react";
 import {useAtomValue} from "jotai";
-import dayjs from "dayjs";
 
 import '../KYC.scss';
-import {kycCaseAtom} from "../../../atoms";
+import {countriesAtomLoadable, kycCaseAtom} from "../../../atoms";
 import {DataTable} from "../../../components";
 import {FormOptionModel, KycCaseModel} from "../../../models";
 import {first} from "../../../utils";
-import {countriesAtomLoadable} from "../../../atoms/menu-options.atom.ts";
 
 export interface KYCCaseListProps {
     basePath: string;
@@ -20,18 +18,12 @@ export interface KYCCaseListProps {
 interface KycCaseTableModel {
     id: string;
     customerName: string;
-    age: number;
     country: string;
     status: string;
+    customerOutreach: string;
     negativeScreening: string;
+    counterpartyNegativeScreening: string;
     customerRiskAssessment: string;
-}
-
-const dobToAge = (dob: string): number => {
-    const date = dayjs(dob);
-    const now = dayjs();
-
-    return now.diff(date, 'year')
 }
 
 const mapCountry = (countryCode: string, countries: FormOptionModel[] = []): string => {
@@ -49,10 +41,11 @@ const kycCaseModelToTableModel = (countries: FormOptionModel[] = []) => {
         return {
             id: model.id,
             customerName: model.customer.name,
-            age: dobToAge(model.customer.dateOfBirth),
             country: mapCountry(model.customer.countryOfResidence, countries),
             status: model.status,
+            customerOutreach: model.customerOutreach || 'N/A',
             negativeScreening: model.negativeScreening?.result || '--',
+            counterpartyNegativeScreening: model.counterpartyNegativeScreening?.result || '--',
             customerRiskAssessment: model.customerRiskAssessment?.result || '--'
         }
     }
@@ -63,12 +56,13 @@ export const KYCCaseList: React.FunctionComponent<KYCCaseListProps> = (props: KY
     const countriesLoadable = useAtomValue(countriesAtomLoadable);
     const navigate = useNavigate();
 
-    const headerData: DataTableHeader[] = [
+    const headerData: Array<{header: string, key: keyof KycCaseTableModel}> = [
         {header: 'Customer Name', key: 'customerName'},
-        {header: 'Age', key: 'age'},
         {header: 'Country', key: 'country'},
         {header: 'Status', key: 'status'},
+        {header: 'Customer Outreach', key: 'customerOutreach'},
         {header: 'Negative Screening', key: 'negativeScreening'},
+        {header: 'Counterparty Negative Screening', key: 'counterpartyNegativeScreening'},
         {header: 'Customer Risk', key: 'customerRiskAssessment'}
     ]
 
@@ -84,10 +78,12 @@ export const KYCCaseList: React.FunctionComponent<KYCCaseListProps> = (props: KY
 
     return (
         <div>
-            <div className="kycButtonBar">
-                <Button style={{float: 'right'}} onClick={() => navigateToCase('new')}>Open case</Button>
-            </div>
-            <DataTable headerData={headerData} rowData={rowData} onRowClick={navigateToCase} />
+            <DataTable
+                headerData={headerData}
+                rowData={rowData}
+                onRowClick={navigateToCase}
+                toolbarButtonText="Open case"
+                onToolbarButtonClick={() => navigateToCase('new')} />
         </div>
     )
 }

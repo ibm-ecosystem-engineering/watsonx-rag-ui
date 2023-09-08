@@ -2,7 +2,7 @@
 // @ts-ignore
 import React, {ChangeEvent, useState} from 'react';
 import {useNavigate} from "react-router-dom";
-import {Button, DatePicker, DatePickerInput, FileUploader, Form, Select, SelectItem, TextInput} from "@carbon/react";
+import {Button, Form, Select, SelectItem, TextInput} from "@carbon/react";
 import {Stack} from "@carbon/react/lib/components/Stack"
 import {default as setValue} from 'set-value';
 import {useAtomValue} from "jotai";
@@ -36,7 +36,7 @@ export const KYCCaseNew: React.FunctionComponent<KYCCaseNewProps> = (props: KYCC
         navigate(props.returnUrl);
     }
 
-    const handleChange = (key: string) => {
+    const handleChange = (key: keyof CustomerModel) => {
         return (event: ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
 
             const updatedCase = JSON.parse(JSON.stringify(newCustomer));
@@ -61,15 +61,6 @@ export const KYCCaseNew: React.FunctionComponent<KYCCaseNewProps> = (props: KYCC
                     onChange={handleChange('name')}
                     required={true}
                 />
-                <DatePicker dateFormat="m/d/Y" datePickerType="single" value={newCustomer.dateOfBirth}>
-                    <DatePickerInput
-                        id="caseCustomerDob"
-                        placeholder="mm/dd/yyyy"
-                        labelText="Date of birth"
-                        type="text"
-                        onChange={handleChange('dateOfBirth')}
-                    />
-                </DatePicker>
                 <Select
                     id="caseCustomerCountry"
                     invalidText="Invalid country selected"
@@ -81,18 +72,27 @@ export const KYCCaseNew: React.FunctionComponent<KYCCaseNewProps> = (props: KYCC
                 >
                     {countries.map(option => <SelectItem key={option.value} text={option.text} value={option.value} />)}
                 </Select>
-                <FileUploader
-                    labelTitle="Add documents"
-                    labelDescription="Max file size is 500mb."
-                    buttonLabel="Add file"
-                    buttonKind="primary"
-                    size="md"
-                    filenameStatus="edit"
-                    // accept={['.jpg', '.png', '.pdf']}
-                    multiple={true}
-                    disabled={false}
-                    iconDescription="Delete file"
-                    name="" />
+                <TextInput.PasswordInput
+                    helperText="The personal identification number of the customer"
+                    id="caseCustomerPIN"
+                    type="password"
+                    invalidText="Invalid personal identification number"
+                    labelText="Personal identification number"
+                    placeholder="Personal identification number"
+                    value={newCustomer.personalIdentificationNumber}
+                    onChange={handleChange('personalIdentificationNumber')}
+                    required={true}
+                />
+                <TextInput
+                    helperText="The current risk category of the customer"
+                    id="caseCustomerRiskCategory"
+                    invalidText="Invalid risk category"
+                    labelText="Current risk category"
+                    placeholder="Risk category"
+                    value={newCustomer.riskCategory}
+                    onChange={handleChange('riskCategory')}
+                    required={true}
+                />
                 <div><Button kind="tertiary" onClick={handleCancel}>Cancel</Button> <Button type="submit">Submit</Button></div>
             </Stack>
         </Form>

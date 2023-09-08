@@ -1,26 +1,25 @@
 // eslint-disable-next-line @typescript-eslint/ban-ts-comment
 // @ts-ignore
-import React, {useState} from 'react';
+import React from 'react';
 import {useNavigate} from "react-router-dom";
 import {useAtomValue} from "jotai";
-import {Button, FileUploader, Select, SelectItem, TextInput, CheckboxGroup, Checkbox} from "@carbon/react";
+import {Button, FileUploader, Select, SelectItem, TextInput} from "@carbon/react";
 import {Stack} from "@carbon/react/lib/components/Stack"
 
-import './KYCCaseReview.scss';
+import './KYCCaseOutreach.scss';
 import {countriesAtomLoadable} from "../../../../atoms";
 import {KycCaseModel} from "../../../../models";
 import {kycCaseManagementApi} from "../../../../services";
-import {fileListUtil} from "../../../../utils";
+import {DocumentList} from "../../../../components";
 
 export interface KYCCaseReviewProps {
     currentCase: KycCaseModel;
     returnUrl: string;
 }
 
-export const KYCCaseReview: React.FunctionComponent<KYCCaseReviewProps> = (props: KYCCaseReviewProps) => {
+export const KYCCaseOutreach: React.FunctionComponent<KYCCaseReviewProps> = (props: KYCCaseReviewProps) => {
     const countriesLoadable = useAtomValue(countriesAtomLoadable);
     const navigate = useNavigate();
-    const [fileStatus, setFileStatus] = useState<'edit' | 'complete' | 'uploading'>('edit')
 
     const service = kycCaseManagementApi();
 
@@ -38,19 +37,9 @@ export const KYCCaseReview: React.FunctionComponent<KYCCaseReviewProps> = (props
         navigate(props.returnUrl);
     }
 
-    const handleFileUploaderChange = (event: {target: {files: FileList, filenameStatus: string}}) => {
-        const files: FileList = event.target.files;
-        const fileNames = fileListUtil(files).map(f => f.name)
-
-        console.log('File uploader: ', {event, files, fileNames});
-
-        setFileStatus('uploading')
-        setTimeout(() => setFileStatus('complete'), 1000)
-    }
-
     return (
         <Stack>
-            <h2>Initial Review</h2>
+            <h2>Customer Outreach</h2>
             <TextInput
                 helperText="The name of the customer"
                 id="caseCustomerName"
@@ -80,9 +69,6 @@ export const KYCCaseReview: React.FunctionComponent<KYCCaseReviewProps> = (props
                 value={props.currentCase.customer.riskCategory}
                 readOnly={true}
             />
-            <div style={{margin: '10px 0'}}>
-                <Checkbox id="caseCustomerOutreach" labelText="Outreach required?" />
-            </div>
             <TextInput
                 helperText="The name of the counterparty"
                 id="caseCounterpartyName"
@@ -90,7 +76,7 @@ export const KYCCaseReview: React.FunctionComponent<KYCCaseReviewProps> = (props
                 labelText="Counterparty name"
                 placeholder="Counterparty name"
                 value={props.currentCase.counterParty?.name || ''}
-                required={true}
+                readOnly={true}
             />
             <Select
                 id="caseCounterpartyCountry"
@@ -98,23 +84,23 @@ export const KYCCaseReview: React.FunctionComponent<KYCCaseReviewProps> = (props
                 labelText="Counterparty country"
                 disabled={countriesLoadable.state !== 'hasData'}
                 value={props.currentCase.counterParty?.countryOfResidence || 'US'}
-                required={true}
+                readOnly={true}
                 style={{marginBottom: '20px'}}
             >
                 {countries.map(option => <SelectItem key={option.value} text={option.text} value={option.value} />)}
             </Select>
+            <DocumentList documents={props.currentCase.documents} />
             <FileUploader
                 labelTitle="Add documents"
                 labelDescription="Max file size is 500mb."
                 buttonLabel="Add file"
                 buttonKind="primary"
                 size="md"
-                filenameStatus={fileStatus}
+                filenameStatus="edit"
                 // accept={['.jpg', '.png', '.pdf']}
                 multiple={true}
                 disabled={false}
                 iconDescription="Delete file"
-                onChange={handleFileUploaderChange}
                 name="" />
             <div><Button kind="tertiary" onClick={handleCancel}>Cancel</Button> <Button type="submit" onClick={handleSubmit}>Submit</Button></div>
         </Stack>

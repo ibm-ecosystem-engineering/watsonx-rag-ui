@@ -1,23 +1,23 @@
 export interface KycCaseModel {
     id: string;
     customer: CustomerModel;
+    counterParty?: PersonModel;
     documents: DocumentModel[];
+    customerOutreach?: string;
     status: string;
-    comments: CommentModel[];
     negativeScreening?: NegativeScreeningModel;
+    counterpartyNegativeScreening?: NegativeScreeningModel;
     customerRiskAssessment?: CustomerRiskAssessmentModel;
 }
 
-export interface CommentModel {
-    comment: string;
-    timestamp: string;
-    author?: string;
+export interface PersonModel {
+    name: string;
+    countryOfResidence: string;
 }
 
-export interface CustomerModel {
-    name: string;
-    dateOfBirth: string;
-    countryOfResidence: string;
+export interface CustomerModel extends PersonModel {
+    personalIdentificationNumber: string;
+    riskCategory: string;
 }
 
 export interface DocumentModel {
@@ -41,7 +41,6 @@ export const createEmptyCase = (): KycCaseModel => {
         customer: createEmptyCustomer(),
         status: 'New',
         documents: [],
-        comments: [],
     }
 }
 
@@ -51,14 +50,14 @@ export const createNewCase = (customer: CustomerModel): KycCaseModel => {
         customer,
         status: 'New',
         documents: [],
-        comments: [],
     }
 }
 
 export const createEmptyCustomer = (): CustomerModel => {
     return {
         name: '',
-        dateOfBirth: new Date().toISOString(),
         countryOfResidence: 'US',
+        personalIdentificationNumber: '',
+        riskCategory: ''
     }
 }

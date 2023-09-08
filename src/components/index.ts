@@ -6,5 +6,3 @@ export * from './DemoTile'
 export * from './DemoTileContainer'
 export * from './DataTable'
 export * from './DocumentList'
-export * from './CommentList';
-export * from './Comments';

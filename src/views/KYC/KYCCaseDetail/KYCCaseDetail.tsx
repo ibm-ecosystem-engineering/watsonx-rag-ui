@@ -13,6 +13,7 @@ import {KYCCaseReview} from "./KYCCaseReview";
 import {KYCCaseCompleted} from "./KYCCaseCompleted";
 import {selectedKycCaseAtom, selectedKycCaseAtomLoadable} from "../../../atoms";
 import {KycCaseModel} from "../../../models";
+import {KYCCaseOutreach} from "./KYCCaseOutreach";
 
 export interface KYCCaseDetailProps {
     basePath: string;
@@ -28,6 +29,7 @@ export const KYCCaseDetail: React.FunctionComponent<KYCCaseDetailProps> = (props
         return (
             <div className="loadingContainer">
             <Loading
+                active={true}
                 description="Active loading indicator" withOverlay={false}
             />
             </div>
@@ -58,6 +60,10 @@ export const KYCCaseDetail: React.FunctionComponent<KYCCaseDetailProps> = (props
 
     if (selectedCase.status === 'New') {
         return (<KYCCaseReview currentCase={selectedCase} returnUrl={props.basePath} />)
+    }
+
+    if (selectedCase.status === 'Outreach') {
+        return (<KYCCaseOutreach currentCase={selectedCase} returnUrl={props.basePath} />)
     }
 
     if (selectedCase.status === 'Pending') {

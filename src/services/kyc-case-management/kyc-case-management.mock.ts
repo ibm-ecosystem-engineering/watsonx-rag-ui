@@ -1,5 +1,4 @@
 import {BehaviorSubject, Observable} from "rxjs";
-import dayjs from 'dayjs';
 
 import {CaseNotFound, KycCaseManagementApi} from "./kyc-case-management.api";
 import {createNewCase, CustomerModel, KycCaseModel} from "../../models";
@@ -10,23 +9,23 @@ const initialValue: KycCaseModel[] = [
         id: '1',
         customer: {
             name: 'John Doe',
-            dateOfBirth: dayjs().subtract(25, 'years').toISOString(),
-            countryOfResidence: 'US'
+            countryOfResidence: 'US',
+            personalIdentificationNumber: '123456789',
+            riskCategory: 'Low',
         },
         status: 'New',
         documents: [{id: '1', name: 'Invoice-2023-01.pdf', path: 'Invoice-2023-01.pdf'}],
-        comments: [],
     },
     {
         id: '2',
         customer: {
             name: 'Jane Doe',
-            dateOfBirth: dayjs().subtract(30, 'years').toISOString(),
-            countryOfResidence: 'CA'
+            countryOfResidence: 'CA',
+            personalIdentificationNumber: '876543219',
+            riskCategory: 'High',
         },
         status: 'New',
         documents: [],
-        comments: [],
     }
 ]
 
@@ -81,30 +80,22 @@ export class KycCaseManagementMock implements KycCaseManagementApi {
         return currentCase;
     }
 
-    async reviewCase(id: string, comment?: string, timestamp: string = new Date().toISOString(), author?: string): Promise<KycCaseModel> {
+    async reviewCase(id: string): Promise<KycCaseModel> {
         const currentCase = first(this.subject.value.filter(c => c.id === id))
             .orElseThrow(() => new CaseNotFound(id))
 
         currentCase.status = 'Pending';
-
-        if (comment) {
-            currentCase.comments.push(Object.assign({comment, timestamp}, author ? {author} : {}))
-        }
 
         this.subject.next(this.subject.value);
 
         return currentCase;
     }
 
-    async approveCase(id: string, comment?: string, timestamp: string = new Date().toISOString(), author?: string): Promise<KycCaseModel> {
+    async approveCase(id: string): Promise<KycCaseModel> {
         const currentCase = first(this.subject.value.filter(c => c.id === id))
             .orElseThrow(() => new CaseNotFound(id))
 
         currentCase.status = 'Closed';
-
-        if (comment) {
-            currentCase.comments.push(Object.assign({comment, timestamp}, author ? {author} : {}))
-        }
 
         this.subject.next(this.subject.value);
 

@@ -8,7 +8,7 @@ import './DocumentList.scss';
 import {DocumentModel} from "../../models";
 
 export interface DocumentListProps {
-    documents?: DocumentModel[]
+    documents: DocumentModel[]
 }
 
 export const DocumentList: React.FunctionComponent<DocumentListProps> = (props: DocumentListProps) => {

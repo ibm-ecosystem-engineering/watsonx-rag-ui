@@ -5,29 +5,35 @@ import {Route, Routes} from "react-router-dom";
 import {Notification, Search, User} from "@carbon/icons-react";
 
 import './App.css'
-import {Dummy, NotFound, UIShell} from "./components";
-import {CustomerRisk, Dashboard, KYC, KYCCaseDetail, KYCCaseList, RTCQC, TaxCLM, Utilities} from "./views";
+import {NotFound, UIShell} from "./components";
+import {CustomerRisk, Dashboard, KYC, KYCCaseDetail, KYCCaseList, RTCQC, Utilities} from "./views";
 import {MenuLinksModel, NavigationModel} from "./models";
+import {DataExtraction} from "./views/DataExtraction";
 
 function App() {
 
     const menuLinks: MenuLinksModel[] = [
         {title: 'Dashboard', href: '/', element: <Dashboard />},
         {
-            title: 'KYC',
-            href: '/kyc',
+            title: 'FinCrime',
+            href: '/fincrime',
             element: <KYC />,
             subMenus: [
-                {title: 'KYC Case List', href: '', element: <KYCCaseList basePath="/kyc" /> },
-                {title: 'KYC Case Detail', href: 'case/:id', element: <KYCCaseDetail basePath="/kyc" /> }
+                {title: 'KYC Case List', href: '', element: <KYCCaseList basePath="/fincrime" /> },
+                {title: 'KYC Case Detail', href: 'case/:id', element: <KYCCaseDetail basePath="/fincrime" /> }
             ]
         },
-        {title: 'TM Alerts', href: '/tm-alerts', element: <Dummy content="TM Alerts" />},
         {title: 'Customer Risk', href: '/customer-risk', element: <CustomerRisk />},
         {title: 'RTC - QC', href: '/rtc-qc', element: <RTCQC />},
-        {title: 'Tax - CLM', href: '/tax-clm', element: <TaxCLM />},
-        {title: 'Tax - GTM', href: '/tax-gtm', element: <Dummy content="Tax - GTM" />},
-        {title: 'Utilities', href: '/utilities', element: <Utilities />},
+        {
+            title: 'Utilities',
+            href: '/utilities',
+            element: <KYC />,
+            subMenus: [
+                {title: 'Utilities', href: '', element: <Utilities />},
+                {title: 'Data Extraction', href: 'data-extraction', element: <DataExtraction />},
+            ]
+        },
     ]
 
     const navigation: NavigationModel = {
@@ -43,7 +49,7 @@ function App() {
         return menuLinks.map(link => {
                 if (link.subMenus && link.subMenus.length > 0) {
                     return (
-                        <Route path={link.href} element={link.element}>
+                        <Route path={link.href} element={link.element} key={link.href}>
                             {renderMenuLinks(link.subMenus)}
                         </Route>
                     )
@@ -51,12 +57,12 @@ function App() {
 
                 if (!link.href) {
                     return (
-                        <Route index element={link.element} />
+                        <Route index element={link.element} key="index" />
                     )
                 }
 
                 return (
-                    <Route path={link.href} element={link.element} />
+                    <Route path={link.href} element={link.element} key={link.href} />
                 )
             })
     }
@@ -66,7 +72,7 @@ function App() {
         <UIShell prefix="watsonx" navigation={navigation}>
             <Routes>
                 {renderMenuLinks(menuLinks)}
-                <Route path="*" element={<NotFound />} />
+                <Route key="route-all" path="*" element={<NotFound />} />
             </Routes>
         </UIShell>
     </div>

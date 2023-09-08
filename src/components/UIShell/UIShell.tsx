@@ -46,11 +46,11 @@ export class UIShell extends React.Component<UIShellProps, UIShellState> {
 
     renderHeaderMenuItem(item: MenuModel) {
         if (isMenuItemModel(item)) {
-            return (<HeaderMenuItem href={item.href}>{item.title}</HeaderMenuItem>)
+            return (<HeaderMenuItem href={item.href} key={item.title}>{item.title}</HeaderMenuItem>)
         }
 
         return (
-            <HeaderMenu aria-label={item.title} menuLinkName={item.title}>
+            <HeaderMenu aria-label={item.title} menuLinkName={item.title} key={item.title}>
                 {item.items.map(childItem => this.renderHeaderMenuItem(childItem))}
             </HeaderMenu>
         )
@@ -81,7 +81,9 @@ export class UIShell extends React.Component<UIShellProps, UIShellState> {
                     return (
                         <HeaderGlobalAction
                             aria-label={item.title}
-                            tooltipAlignment="end">
+                            tooltipAlignment="end"
+                            key={item.title}
+                        >
                             {item.action}
                         </HeaderGlobalAction>
                     )
@@ -94,9 +96,13 @@ export class UIShell extends React.Component<UIShellProps, UIShellState> {
     renderSideNavItem(item: MenuModel) {
         if (isMenuItemModel(item)) {
             return (
-                <SideNavMenuItem element={Link} to={item.href}
-                                     isActive={this.state.activeItem === item.href}
-                                     onClick={() => { this.setState({ activeItem: item.href }) }}>
+                <SideNavMenuItem
+                    element={Link}
+                    to={item.href}
+                    isActive={this.state.activeItem === item.href}
+                    onClick={() => { this.setState({ activeItem: item.href }) }}
+                    key={item.title}
+                >
                     {item.title}
                 </SideNavMenuItem>
             )
