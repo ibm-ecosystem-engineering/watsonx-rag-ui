@@ -11,19 +11,25 @@ import {
     dataExtractionResultsAtom,
     dataExtractionResultsAtomLoadable
 } from "../../atoms";
-import {DataExtractionApi, dataExtractionApi, DataExtractionQuestion} from "../../services";
+import {DataExtractionApi, dataExtractionApi} from "../../services";
 import {DataTable} from "../../components";
+import {DataExtractionQuestionModel} from "../../models";
+import {Loadable} from "jotai/vanilla/utils/loadable";
 
 export interface DataExtractionProps {
 }
 
 interface DataExtractionValues {
+    state: string;
     customer: string;
-    questions: DataExtractionQuestion[];
+    questions: DataExtractionQuestionModel[];
 }
 
-const createEmptyDataExtractionValues = (questions: DataExtractionQuestion[] = []): DataExtractionValues => {
+const createEmptyDataExtractionValues = (questionLoadable: Loadable<Promise<DataExtractionQuestionModel[]>>): DataExtractionValues => {
+    const questions = questionLoadable.state === 'hasData' ? questionLoadable.data : []
+
     return {
+        state: questionLoadable.state,
         customer: '',
         questions,
     }
@@ -31,21 +37,34 @@ const createEmptyDataExtractionValues = (questions: DataExtractionQuestion[] = [
 
 export const DataExtraction: React.FunctionComponent<DataExtractionProps> = () => {
     const questionLoadable = useAtomValue(dataExtractionQuestionAtomLoadable)
-    const [dataExtraction, setDataExtraction] = useState<DataExtractionValues>(createEmptyDataExtractionValues(questionLoadable.state === 'hasData' ? questionLoadable.data : []))
+    const [dataExtraction, setDataExtraction] = useState<DataExtractionValues>(createEmptyDataExtractionValues(questionLoadable))
     const setResults = useSetAtom(dataExtractionResultsAtom)
 
     const service: DataExtractionApi = dataExtractionApi()
 
     if (questionLoadable.state === 'loading') {
-        return (<Loading
-            active={true}
-            description="Active loading indicator" withOverlay={false}
-        />)
+        return (
+            <Loading
+                active={true}
+                description="Active loading indicator" withOverlay={false}
+            />
+        )
     } else if (questionLoadable.state === 'hasError') {
         return (<div>Error</div>)
     }
 
-    const questions: DataExtractionQuestion[] = questionLoadable.data;
+    const questions: DataExtractionQuestionModel[] = questionLoadable.data;
+
+    if (dataExtraction.state === 'loading') {
+        setDataExtraction(Object.assign(
+            {},
+            dataExtraction,
+            {
+                state: 'hasData',
+                questions: questions.filter(val => val.inScope)
+            }
+        ))
+    }
 
     const handleCustomer = (event: {target: {value: string}}) => {
         const newValues = Object.assign({}, dataExtraction, {customer: event.target.value})
@@ -53,7 +72,7 @@ export const DataExtraction: React.FunctionComponent<DataExtractionProps> = () =
         setDataExtraction(newValues);
     }
 
-    const handleQuestion = (question: DataExtractionQuestion) => {
+    const handleQuestion = (question: DataExtractionQuestionModel) => {
         return (_: ChangeEvent<HTMLInputElement>, {checked}: {checked: boolean}) => {
             const questions = dataExtraction.questions.slice()
 
@@ -69,7 +88,7 @@ export const DataExtraction: React.FunctionComponent<DataExtractionProps> = () =
         }
     }
 
-    const containsQuestion = (question: DataExtractionQuestion) => {
+    const containsQuestion = (question: DataExtractionQuestionModel) => {
         return dataExtraction.questions.some(target => target.id === question.id)
     }
 

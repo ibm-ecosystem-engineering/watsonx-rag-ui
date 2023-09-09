@@ -6,7 +6,7 @@ import {createClient} from 'graphql-ws';
 const hostname = window.location.hostname
 const port = window.location.port
 
-const subscriptionUrl = `ws://${hostname}:${port}/graphql`
+const subscriptionUrl = `ws://${hostname}:${port}/subscription`
 
 console.log('Subscription uri: ' + subscriptionUrl)
 

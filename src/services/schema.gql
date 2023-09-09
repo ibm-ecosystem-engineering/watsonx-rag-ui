@@ -1,0 +1,87 @@
+# ------------------------------------------------------
+# THIS FILE WAS AUTOMATICALLY GENERATED (DO NOT MODIFY)
+# ------------------------------------------------------
+
+"""Case comment"""
+type Comment {
+  author: String
+  comment: String!
+  id: ID!
+  timestamp: String!
+}
+
+"""KYC Customer"""
+type Customer {
+  countryOfResidence: String!
+  dateOfBirth: String!
+  name: String!
+}
+
+input CustomerInput {
+  countryOfResidence: String!
+  dateOfBirth: String!
+  name: String!
+}
+
+"""Data extraction question"""
+type DataExtractionQuestion {
+  id: ID!
+  inScope: Boolean!
+  question: String!
+}
+
+"""Data extraction question input"""
+input DataExtractionQuestionIdInput {
+  id: ID!
+}
+
+"""Data extraction result"""
+type DataExtractionResult {
+  expectedResponse: String!
+  id: ID!
+  inScope: Boolean!
+  question: String!
+  watsonxResponse: String!
+}
+
+"""KYC Document"""
+type Document {
+  id: ID!
+  name: String!
+  path: String!
+}
+
+"""greeting"""
+type Greeting {
+  greeting: String!
+}
+
+"""KYC Case"""
+type KycCase {
+  comments: [Comment!]!
+  customer: Customer!
+  documents: [Document!]!
+  id: ID!
+  status: String!
+}
+
+type Mutation {
+  addDocumentToCase(caseId: ID!, documentName: String!, documentPath: String!): KycCase!
+  approveCase(author: String, caseId: ID!, comment: String, timestamp: String): KycCase!
+  createCase(customer: CustomerInput!): KycCase!
+  reviewCase(author: String, caseId: ID!, comment: String, timestamp: String): KycCase!
+}
+
+type Query {
+  extractDataForQuestion(customer: String!, question: DataExtractionQuestionIdInput!): DataExtractionResult!
+  extractDataForQuestions(customer: String!, questions: [DataExtractionQuestionIdInput!]!): [DataExtractionResult!]!
+  getCase(id: ID!): KycCase!
+  helloWorld: Greeting!
+  listCases: [KycCase!]!
+  listQuestions: [DataExtractionQuestion!]!
+}
+
+type Subscription {
+  extractDataObservable(customer: String!, questions: [DataExtractionQuestionIdInput!]!): [DataExtractionResult!]!
+  subscribeToCases: [KycCase!]!
+}

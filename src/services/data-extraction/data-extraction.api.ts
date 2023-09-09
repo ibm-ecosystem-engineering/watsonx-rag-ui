@@ -1,27 +1,13 @@
 import {Observable} from "rxjs";
-
-export interface DataExtractionQuestion {
-    id: string;
-    question: string;
-}
-
-export interface DataExtractionConfig extends DataExtractionQuestion {
-    expectedResponse: string;
-    inScope: boolean;
-}
-
-export interface DataExtractionResult extends DataExtractionQuestion {
-    expectedResponse: string;
-    watsonxResponse: string;
-}
+import {DataExtractionQuestionModel, DataExtractionResultModel} from "../../models";
 
 
 export abstract class DataExtractionApi {
-    abstract listQuestions(): Promise<DataExtractionQuestion[]>;
+    abstract listQuestions(): Promise<DataExtractionQuestionModel[]>;
 
-    abstract extractData(customer: string, questions: DataExtractionQuestion[]): Promise<DataExtractionResult[]>;
+    abstract extractData(customer: string, questions: Array<{id: string}>): Promise<DataExtractionResultModel[]>;
 
-    abstract extractDataForQuestion(customer: string, question: DataExtractionQuestion): Promise<DataExtractionResult>;
+    abstract extractDataForQuestion(customer: string, question: {id: string}): Promise<DataExtractionResultModel>;
 
-    abstract extractDataObservable(customer: string, questions: DataExtractionQuestion[]): Observable<DataExtractionResult>;
+    abstract extractDataObservable(customer: string, questions: Array<{id: string}>): Observable<DataExtractionResultModel[]>;
 }

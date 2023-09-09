@@ -1,5 +1,5 @@
-import {DataExtractionApi} from "./data-extraction.api.ts";
-import {DataExtractionMock} from "./data-extraction.mock.ts";
+import {DataExtractionApi} from "./data-extraction.api";
+import {DataExtractionGraphql} from "./data-extraction.graphql";
 
 export * from './data-extraction.api';
 
@@ -9,5 +9,5 @@ export const dataExtractionApi = (): DataExtractionApi => {
         return _instance;
     }
 
-    return _instance = new DataExtractionMock();
+    return _instance = new DataExtractionGraphql();
 }
