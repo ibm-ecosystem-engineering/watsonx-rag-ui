@@ -37,38 +37,6 @@ const LIST_CASES = gql`
         }
     }
 `
-const CASES_SUBSCRIPTION = gql`
-    subscription { 
-        subscribeToCases {
-            id
-            status
-            customer {
-                name
-                countryOfResidence
-                riskCategory
-            }
-            documents {
-                id
-                name
-                path
-            }
-            customerOutreach
-            counterparty {
-                name
-                countryOfResidence
-            }
-            negativeScreening {
-                result
-            }
-            counterpartyNegativeScreening {
-                result
-            }
-            customerRiskAssessment {
-                result
-            }
-        }
-    }
-`
 const GET_CASE = gql`
     query GetCase($caseId:ID!) { 
         getCase(id:$caseId) {
@@ -230,7 +198,7 @@ const REVIEW_CASE = gql`
     }
 `
 
-export class KycCaseManagementGraphql implements KycCaseManagementApi {
+export class KycCaseManagementGraphqlHack implements KycCaseManagementApi {
     client: ApolloClient<unknown>;
     subject: BehaviorSubject<KycCaseModel[]>
 
@@ -256,27 +224,7 @@ export class KycCaseManagementGraphql implements KycCaseManagementApi {
             return this.subject
         }
 
-        this.client
-            .subscribe<{subscribeToCases: KycCaseModel[]}>({
-                query: CASES_SUBSCRIPTION
-            })
-            .map((config: FetchResult<{subscribeToCases: KycCaseModel[]}>) => {
-                console.log('Mapping data', {data: config.data})
-                return config.data?.subscribeToCases
-            })
-            .subscribe({
-                next: (val: KycCaseModel[]) => {
-                    console.log('Got next value', {val})
-                    this.subject.next(val)
-                },
-                complete: () => {
-                    console.log('Complete subscription!!!!')
-                },
-                error: err => {
-                    console.log('Error with subscription', err)
-                    this.subject.error(err)
-                }
-            })
+        this.listCases().then(result => this.subject.next(result))
 
         return this.subject;
     }
@@ -289,7 +237,11 @@ export class KycCaseManagementGraphql implements KycCaseManagementApi {
                 refetchQueries: [{query: LIST_CASES}],
                 awaitRefetchQueries: true
             })
-            .then(async (result: FetchResult<{createCase: KycCaseModel}>) => await result.data?.createCase) as Promise<KycCaseModel>
+            .then(async (result: FetchResult<{createCase: KycCaseModel}>) => {
+                this.subscribeToCases();
+
+                return result.data?.createCase
+            }) as Promise<KycCaseModel>
     }
 
     addDocumentToCase(caseId: string, documentName: string, documentPath: string): Promise<KycCaseModel> {
@@ -311,7 +263,11 @@ export class KycCaseManagementGraphql implements KycCaseManagementApi {
                 refetchQueries: [{query: LIST_CASES}, {query: GET_CASE, variables: {caseId: input.id}}],
                 awaitRefetchQueries: true
             })
-            .then(async (result: FetchResult<{approveCase: KycCaseModel}>) => await result.data?.approveCase) as Promise<KycCaseModel>
+            .then(async (result: FetchResult<{approveCase: KycCaseModel}>) => {
+                this.subscribeToCases();
+
+                return result.data?.approveCase
+            }) as Promise<KycCaseModel>
     }
 
     reviewCase(input: ReviewCaseModel): Promise<KycCaseModel> {
@@ -322,7 +278,11 @@ export class KycCaseManagementGraphql implements KycCaseManagementApi {
                 refetchQueries: [{query: LIST_CASES}, {query: GET_CASE, variables: {caseId: input.id}}],
                 awaitRefetchQueries: true
             })
-            .then(async (result: FetchResult<{reviewCase: KycCaseModel}>) => await result.data?.reviewCase) as Promise<KycCaseModel>
+            .then(async (result: FetchResult<{reviewCase: KycCaseModel}>) => {
+                this.subscribeToCases();
+
+                return result.data?.reviewCase
+            }) as Promise<KycCaseModel>
     }
 
     getCase(caseId: string): Promise<KycCaseModel> {

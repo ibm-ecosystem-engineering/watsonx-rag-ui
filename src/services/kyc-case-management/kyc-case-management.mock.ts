@@ -1,7 +1,7 @@
 import {BehaviorSubject, Observable} from "rxjs";
 
 import {CaseNotFound, KycCaseManagementApi} from "./kyc-case-management.api";
-import {createNewCase, CustomerModel, KycCaseModel} from "../../models";
+import {ApproveCaseModel, createNewCase, CustomerModel, KycCaseModel, ReviewCaseModel} from "../../models";
 import {delay, first} from "../../utils";
 
 const initialValue: KycCaseModel[] = [
@@ -10,19 +10,19 @@ const initialValue: KycCaseModel[] = [
         customer: {
             name: 'John Doe',
             countryOfResidence: 'US',
-            personalIdentificationNumber: '123456789',
-            riskCategory: 'Low',
+            personalIdentificationNumber: '123458690',
+            riskCategory: 'Low'
         },
         status: 'New',
-        documents: [{id: '1', name: 'Invoice-2023-01.pdf', path: 'Invoice-2023-01.pdf'}],
+        documents: [],
     },
     {
         id: '2',
         customer: {
             name: 'Jane Doe',
             countryOfResidence: 'CA',
-            personalIdentificationNumber: '876543219',
-            riskCategory: 'High',
+            personalIdentificationNumber: 'AB1458690',
+            riskCategory: 'Low'
         },
         status: 'New',
         documents: [],
@@ -66,36 +66,39 @@ export class KycCaseManagementMock implements KycCaseManagementApi {
         return newCase;
     }
 
-    async addDocumentToCase(id: string, documentName: string, documentPath: string): Promise<KycCaseModel> {
-        const currentCase = await this.getCase(id);
+    async addDocumentToCase(caseId: string, documentName: string, documentPath: string): Promise<KycCaseModel> {
+        const currentCase = await this.getCase(caseId);
 
         currentCase.status = 'Pending';
 
-        const documentId = currentCase.documents.length + 1;
+        const id = '' + (currentCase.documents.length + 1);
 
-        currentCase.documents.push({id: `${id}-${documentId}`, name: documentName, path: documentPath});
+        currentCase.documents.push({id: `${caseId}-${id}`, name: documentName, path: documentPath});
 
         this.subject.next(this.subject.value);
 
         return currentCase;
     }
 
-    async reviewCase(id: string): Promise<KycCaseModel> {
-        const currentCase = first(this.subject.value.filter(c => c.id === id))
-            .orElseThrow(() => new CaseNotFound(id))
+    async reviewCase(reviewCase: ReviewCaseModel): Promise<KycCaseModel> {
+        const currentCase: KycCaseModel | undefined = first(this.subject.value.filter(c => c.id === reviewCase.id))
+            .orElseThrow(() => new CaseNotFound(reviewCase.id));
 
-        currentCase.status = 'Pending';
+        const status: string = reviewCase.customerOutreach ? 'CustomerOutreach' : 'Pending';
+
+        Object.assign(currentCase, {reviewCase}, {status});
 
         this.subject.next(this.subject.value);
 
         return currentCase;
     }
 
-    async approveCase(id: string): Promise<KycCaseModel> {
-        const currentCase = first(this.subject.value.filter(c => c.id === id))
-            .orElseThrow(() => new CaseNotFound(id))
+    async approveCase(input: ApproveCaseModel): Promise<KycCaseModel> {
+        const currentCase: KycCaseModel | undefined = first(this.subject.value.filter(c => c.id === input.id))
+            .orElseThrow(() => new CaseNotFound(input.id));
 
-        currentCase.status = 'Closed';
+        currentCase.status = 'Pending';
+        currentCase.documents = currentCase.documents.concat(input.documents)
 
         this.subject.next(this.subject.value);
 

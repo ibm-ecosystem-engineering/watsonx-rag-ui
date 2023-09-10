@@ -2,25 +2,30 @@
 # THIS FILE WAS AUTOMATICALLY GENERATED (DO NOT MODIFY)
 # ------------------------------------------------------
 
-"""Case comment"""
-type Comment {
-  author: String
-  comment: String!
+input ApproveCaseInput {
+  customerOutreach: String!
+  documents: [DocumentInput!]!
   id: ID!
-  timestamp: String!
 }
 
 """KYC Customer"""
 type Customer {
   countryOfResidence: String!
-  dateOfBirth: String!
   name: String!
+  personalIdentificationNumber: String!
+  riskCategory: String!
 }
 
 input CustomerInput {
   countryOfResidence: String!
-  dateOfBirth: String!
   name: String!
+  personalIdentificationNumber: String!
+  riskCategory: String!
+}
+
+"""Customer risk assessment"""
+type CustomerRiskAssessment {
+  result: String!
 }
 
 """Data extraction question"""
@@ -51,6 +56,11 @@ type Document {
   path: String!
 }
 
+input DocumentInput {
+  name: String!
+  path: String!
+}
+
 """greeting"""
 type Greeting {
   greeting: String!
@@ -58,18 +68,38 @@ type Greeting {
 
 """KYC Case"""
 type KycCase {
-  comments: [Comment!]!
+  counterparty: Person
+  counterpartyNegativeScreening: NegativeScreening
   customer: Customer!
+  customerOutreach: String
+  customerRiskAssessment: CustomerRiskAssessment
   documents: [Document!]!
   id: ID!
+  negativeScreening: NegativeScreening
   status: String!
 }
 
 type Mutation {
   addDocumentToCase(caseId: ID!, documentName: String!, documentPath: String!): KycCase!
-  approveCase(author: String, caseId: ID!, comment: String, timestamp: String): KycCase!
+  approveCase(case: ApproveCaseInput!): KycCase!
   createCase(customer: CustomerInput!): KycCase!
-  reviewCase(author: String, caseId: ID!, comment: String, timestamp: String): KycCase!
+  reviewCase(case: ReviewCaseInput!): KycCase!
+}
+
+"""Negative screening"""
+type NegativeScreening {
+  result: String!
+}
+
+"""KYC Person"""
+type Person {
+  countryOfResidence: String!
+  name: String!
+}
+
+input PersonInput {
+  countryOfResidence: String!
+  name: String!
 }
 
 type Query {
@@ -79,6 +109,13 @@ type Query {
   helloWorld: Greeting!
   listCases: [KycCase!]!
   listQuestions: [DataExtractionQuestion!]!
+}
+
+input ReviewCaseInput {
+  counterparty: PersonInput!
+  customerOutreach: String
+  documents: [DocumentInput!]!
+  id: ID!
 }
 
 type Subscription {

@@ -1,8 +1,7 @@
 // eslint-disable-next-line @typescript-eslint/ban-ts-comment
 // @ts-ignore
 import React from 'react';
-import { useNavigate } from "react-router-dom";
-import {Button, DataTableHeader} from "@carbon/react";
+import {useNavigate} from "react-router-dom";
 import {useAtomValue} from "jotai";
 
 import '../KYC.scss';
@@ -52,7 +51,7 @@ const kycCaseModelToTableModel = (countries: FormOptionModel[] = []) => {
 }
 
 export const KYCCaseList: React.FunctionComponent<KYCCaseListProps> = (props: KYCCaseListProps) => {
-    const kycCases: KycCaseModel[] = useAtomValue(kycCaseAtom);
+    const kycCases = useAtomValue(kycCaseAtom);
     const countriesLoadable = useAtomValue(countriesAtomLoadable);
     const navigate = useNavigate();
 

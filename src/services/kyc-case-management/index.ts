@@ -1,5 +1,5 @@
-import {KycCaseManagementMock} from "./kyc-case-management.mock.ts";
-import {KycCaseManagementApi} from "./kyc-case-management.api.ts";
+import {KycCaseManagementApi} from "./kyc-case-management.api";
+import {KycCaseManagementGraphqlHack} from "./kyc-case-management.graphql-hack";
 
 export * from './kyc-case-management.api';
 
@@ -9,6 +9,5 @@ export const kycCaseManagementApi = (): KycCaseManagementApi => {
         return _instance;
     }
 
-    return _instance = new KycCaseManagementMock();
+    return _instance = new KycCaseManagementGraphqlHack();
 }
-

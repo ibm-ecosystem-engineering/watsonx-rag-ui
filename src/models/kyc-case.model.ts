@@ -1,10 +1,10 @@
 export interface KycCaseModel {
     id: string;
-    customer: CustomerModel;
-    counterParty?: PersonModel;
-    documents: DocumentModel[];
-    customerOutreach?: string;
     status: string;
+    customer: CustomerModel;
+    documents: DocumentModel[];
+    counterparty?: PersonModel;
+    customerOutreach?: string;
     negativeScreening?: NegativeScreeningModel;
     counterpartyNegativeScreening?: NegativeScreeningModel;
     customerRiskAssessment?: CustomerRiskAssessmentModel;
@@ -34,13 +34,40 @@ export interface CustomerRiskAssessmentModel {
     result: string;
 }
 
+export interface ReviewCaseModel {
+    id: string;
+    counterparty: PersonModel;
+    customerOutreach?: string;
+    documents: DocumentModel[];
+}
+
+export interface ApproveCaseModel {
+    id: string;
+    customerOutreach: string;
+    documents: DocumentModel[];
+}
+
 
 export const createEmptyCase = (): KycCaseModel => {
     return {
         id: 'new',
-        customer: createEmptyCustomer(),
+        customer: {
+            name: '',
+            countryOfResidence: 'US',
+            personalIdentificationNumber: '',
+            riskCategory: ''
+        },
         status: 'New',
         documents: [],
+    }
+}
+
+export const createEmptyCustomer = (): CustomerModel => {
+    return {
+        name: '',
+        countryOfResidence: 'US',
+        riskCategory: 'Low',
+        personalIdentificationNumber: '',
     }
 }
 
@@ -53,11 +80,22 @@ export const createNewCase = (customer: CustomerModel): KycCaseModel => {
     }
 }
 
-export const createEmptyCustomer = (): CustomerModel => {
+export const createEmptyReviewCase = (id: string): ReviewCaseModel => {
     return {
-        name: '',
-        countryOfResidence: 'US',
-        personalIdentificationNumber: '',
-        riskCategory: ''
+        id,
+        counterparty: {
+            name: '',
+            countryOfResidence: 'US'
+        },
+        customerOutreach: '',
+        documents: []
+    }
+}
+
+export const createEmptyApproveCase = (id: string): ApproveCaseModel => {
+    return {
+        id,
+        customerOutreach: 'Completed',
+        documents: []
     }
 }

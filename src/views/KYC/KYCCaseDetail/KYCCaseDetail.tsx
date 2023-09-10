@@ -7,7 +7,6 @@ import {useAtomValue, useSetAtom} from "jotai";
 
 import './KYCCaseDetail.scss';
 import {KYCCaseNew} from "./KYCCaseNew";
-import {KYCCaseApproval} from "./KYCCaseApproval";
 import {KYCCasePending} from "./KYCCasePending";
 import {KYCCaseReview} from "./KYCCaseReview";
 import {KYCCaseCompleted} from "./KYCCaseCompleted";
@@ -68,10 +67,6 @@ export const KYCCaseDetail: React.FunctionComponent<KYCCaseDetailProps> = (props
 
     if (selectedCase.status === 'Pending') {
         return (<KYCCasePending currentCase={selectedCase} returnUrl={props.basePath} />)
-    }
-
-    if (selectedCase.status === 'Awaiting Approval') {
-        return (<KYCCaseApproval currentCase={selectedCase} returnUrl={props.basePath} />)
     }
 
     if (selectedCase.status === 'Closed') {

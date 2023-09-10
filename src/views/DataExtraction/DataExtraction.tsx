@@ -3,7 +3,6 @@
 import React, {ChangeEvent, FormEvent, useState} from 'react';
 import {useAtomValue, useSetAtom} from "jotai";
 import {Button, Checkbox, DataTableHeader, Form, FormGroup, Loading, TextInput} from "@carbon/react";
-import {Stack} from "@carbon/react/lib/components/Stack"
 
 import './DataExtraction.scss';
 import {
@@ -12,7 +11,7 @@ import {
     dataExtractionResultsAtomLoadable
 } from "../../atoms";
 import {DataExtractionApi, dataExtractionApi} from "../../services";
-import {DataTable} from "../../components";
+import {DataTable, Stack} from "../../components";
 import {DataExtractionQuestionModel} from "../../models";
 import {Loadable} from "jotai/vanilla/utils/loadable";
 
@@ -105,7 +104,7 @@ export const DataExtraction: React.FunctionComponent<DataExtractionProps> = () =
     return (
         <div>
         <Form onSubmit={handleSubmit}>
-            <Stack gap={7}>
+            <Stack gap={5}>
                 <h2>KYC Data Extraction</h2>
                 <TextInput
                     helperText="The name of the customer"
