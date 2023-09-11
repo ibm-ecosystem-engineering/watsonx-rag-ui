@@ -1,27 +1,8 @@
-
 import {atom, Atom} from "jotai";
 import {atomWithObservable, loadable} from "jotai/utils";
 
 import {kycCaseManagementApi} from "../services";
 import {KycCaseModel} from "../models";
-
-const baseKycCasesAtom = atom<Promise<KycCaseModel[]>>(kycCaseManagementApi().listCases())
-
-export const kycCasesAtom = atom<Promise<KycCaseModel[]>>(
-    (get) => {
-        console.log('Getting cases')
-        return get(baseKycCasesAtom)
-    },
-    (_, set, val) => {
-        console.log('Reloading cases: ', {val})
-        set(baseKycCasesAtom, kycCaseManagementApi().listCases())
-    },
-    () => {
-        console.log('On mount')
-        set(baseKycCasesAtom, kycCaseManagementApi().listCases())
-    }
-);
-export const kycCasesAtomLoadable = loadable(kycCasesAtom);
 
 export const kycCaseAtom: Atom<KycCaseModel[]> = atomWithObservable(
     () => kycCaseManagementApi().subscribeToCases(),
@@ -29,14 +10,19 @@ export const kycCaseAtom: Atom<KycCaseModel[]> = atomWithObservable(
 )
 
 const baseSelectedCaseAtom = atom<Promise<KycCaseModel | undefined>>(Promise.resolve(undefined))
-export const selectedKycCaseAtom = atom<Promise<KycCaseModel | undefined>>(
+
+type CaseInput = string | KycCaseModel;
+
+// eslint-disable-next-line @typescript-eslint/ban-ts-comment
+// @ts-ignore
+export const selectedKycCaseAtom = atom<Promise<KycCaseModel | undefined>, CaseInput[]>(
     (get) => get(baseSelectedCaseAtom),
-    (get, set, caseId: string | KycCaseModel) => {
-        if (typeof caseId === 'string') {
-            set(baseSelectedCaseAtom, kycCaseManagementApi().getCase(caseId));
-        } else {
-            set(baseSelectedCaseAtom, Promise.resolve(caseId));
-        }
+    (_, set, caseId: CaseInput) => {
+        const result = (typeof caseId === 'string') ? kycCaseManagementApi().getCase(caseId) : Promise.resolve(caseId);
+
+        set(baseSelectedCaseAtom, result);
+
+        return result;
     }
 );
 

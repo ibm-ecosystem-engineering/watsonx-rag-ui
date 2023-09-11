@@ -9,7 +9,7 @@ export interface KYCCaseCompletedProps {
     returnUrl: string;
 }
 
-export const KYCCaseCompleted: React.FunctionComponent<KYCCaseCompletedProps> = (props: KYCCaseCompletedProps) => {
+export const KYCCaseCompleted: React.FunctionComponent<KYCCaseCompletedProps> = () => {
 
     return (<div>Completed</div>)
 }

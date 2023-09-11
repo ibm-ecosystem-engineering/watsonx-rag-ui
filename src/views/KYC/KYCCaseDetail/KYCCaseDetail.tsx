@@ -43,7 +43,9 @@ export const KYCCaseDetail: React.FunctionComponent<KYCCaseDetailProps> = (props
 
     const selectedCase: KycCaseModel | undefined = selectedCaseLoadable.data
 
-    if (id !== 'new' && selectedCase?.id !== id) {
+    if (id === undefined) {
+        navigate(props.basePath)
+    } else if (id !== 'new' && selectedCase?.id !== id) {
         setSelectedCase(id);
     }
 

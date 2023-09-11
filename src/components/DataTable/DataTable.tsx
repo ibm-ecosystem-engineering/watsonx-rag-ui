@@ -35,6 +35,12 @@ export const DataTable: React.FunctionComponent<DataTableProps<any[]>> = <ColTyp
         return (<Button onClick={onClick}>{text || 'New'}</Button>)
     }
 
+    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+    // @ts-ignore
+    const mapHeaderProps = (...props: unknown[]): unknown[] => {
+        return props;
+    }
+
     const onRowClick = props.onRowClick || (() => {return});
     return (
         <InnerDataTable rows={props.rowData} headers={props.headerData} isSortable>
@@ -50,7 +56,7 @@ export const DataTable: React.FunctionComponent<DataTableProps<any[]>> = <ColTyp
                         <TableHead>
                             <TableRow>
                                 {headers.map((header) => (
-                                    <TableHeader {...getHeaderProps({ header })}>
+                                    <TableHeader {...mapHeaderProps(getHeaderProps({ header }))}>
                                         {header.header}
                                     </TableHeader>
                                 ))}
