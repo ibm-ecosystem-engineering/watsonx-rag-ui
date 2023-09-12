@@ -24,7 +24,7 @@ jobs:
           
           RELEASE_TAG=${REF#refs/tags/}
           
-          IMAGE="${vars.IMAGE_BASE}:${RELEASE_TAG}"
+          IMAGE="${{vars.IMAGE_BASE}}:${RELEASE_TAG}"
           
           echo "Release tag: ${RELEASE_TAG}"
           echo "release-tag=$RELEASE_TAG" >> $GITHUB_OUTPUT
@@ -36,16 +36,20 @@ jobs:
     runs-on: ubuntu-latest
     container:
       image: quay.io/cloudnativetoolkit/cli-tools-ibmcloud:v1.2-v0.6.1-alpine
+      options: --user devops
     needs: setup
+
+    env:
+      HOME: /home/devops
 
     steps:
       - name: IBM Cloud CE plugin
         run: ibmcloud plugin install code-engine -f
 
       - name: IBM Cloud login
-        run: ibmcloud login -r "${vars.REGION}" -g "${vars.RESOURCE_GROUP}" --apikey "${secrets.IBMCLOUD_APIKEY}"
+        run: ibmcloud login -r "${{vars.REGION}}" -g "${{vars.RESOURCE_GROUP}}" --apikey "${{secrets.IBMCLOUD_APIKEY}}"
 
       - name: Update application
         run: |
-          ibmcloud ce project select --name "${vars.CE_PROJECT_NAME}"
-          ibmcloud ce application update --name "${vars.CE_APP_NAME}"" -i "${{ needs.setup.outputs.image }}"
+          ibmcloud ce project select --name "${{vars.CE_PROJECT_NAME}}"
+          ibmcloud ce application update --name "${{vars.CE_APP_NAME}}" -i "${{ needs.setup.outputs.image }}"
