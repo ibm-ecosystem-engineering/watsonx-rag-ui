@@ -155,7 +155,6 @@ const DataExtractionResults = () => {
 
     const headerData: DataTableHeader[] = [
         {header: 'Question', key: 'question'},
-        {header: 'Expected Response', key: 'expectedResponse'},
         {header: 'WatsonX Response', key: 'watsonxResponse'}
     ]
 
