@@ -92,8 +92,8 @@ export const createEmptyCustomer = (): CustomerModel => {
         name: '',
         countryOfResidence: 'United States',
         personalIdentificationNumber: '',
-        industryType: 'Private Limited Company',
-        entityType: 'Growing of rice',
+        industryType: 'Growing of rice',
+        entityType: 'Private Limited Company',
     }
 }
 
