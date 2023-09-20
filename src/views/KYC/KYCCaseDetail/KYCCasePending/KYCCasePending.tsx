@@ -14,6 +14,8 @@ import {
 } from "../../../../components";
 import {KycCaseModel} from "../../../../models";
 import {kycCaseManagementApi} from "../../../../services";
+import {useSetAtom} from "jotai";
+import {selectedKycCaseAtom} from "../../../../atoms";
 
 export interface KYCCasePendingProps {
     currentCase: KycCaseModel;
@@ -22,6 +24,7 @@ export interface KYCCasePendingProps {
 
 export const KYCCasePending: React.FunctionComponent<KYCCasePendingProps> = (props: KYCCasePendingProps) => {
     const navigate = useNavigate();
+    const setSelectedCase = useSetAtom(selectedKycCaseAtom)
     const service = kycCaseManagementApi();
 
     const handleCancel = () => {
@@ -30,6 +33,7 @@ export const KYCCasePending: React.FunctionComponent<KYCCasePendingProps> = (pro
 
     const handleRefresh = () => {
         service.processCase(props.currentCase.id)
+            .then(kycCase => setSelectedCase(kycCase))
             .catch(err => console.error('Error processing case: ', {err}))
     }
 

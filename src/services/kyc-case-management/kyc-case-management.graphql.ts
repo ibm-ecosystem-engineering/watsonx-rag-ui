@@ -402,6 +402,13 @@ export class KycCaseManagementGraphql implements KycCaseManagementApi {
         this.client = getApolloClient();
         this.subject = new BehaviorSubject<KycCaseModel[]>([])
         this.caseNotifySubject = new Subject<string>();
+
+        this.client.onClearStore(async () => {
+            console.log('Store cleared');
+        })
+        this.client.onResetStore(async () => {
+            console.log('Store reset')
+        })
     }
 
     listCases(): Promise<KycCaseModel[]> {
@@ -456,7 +463,7 @@ export class KycCaseManagementGraphql implements KycCaseManagementApi {
                 mutation: CREATE_CASE,
                 variables: {customer},
                 refetchQueries: [{query: LIST_CASES}],
-                awaitRefetchQueries: true
+                awaitRefetchQueries: true,
             })
             .then(async (result: FetchResult<{createCase: KycCaseModel}>) => {
                 this.caseNotifySubject.next(result.data?.createCase.id || '');
@@ -470,7 +477,7 @@ export class KycCaseManagementGraphql implements KycCaseManagementApi {
             .mutate<{addDocumentToCase: DocumentModel}>({
                 mutation: ADD_DOCUMENT_TO_CASE,
                 variables: {caseId, documentName, document},
-                refetchQueries: [{query: LIST_CASES}],
+                refetchQueries: [{query: LIST_CASES}, this.buildGetCaseQuery(caseId)],
                 awaitRefetchQueries: true
             })
             .then(async (result: FetchResult<{addDocumentToCase: DocumentModel}>) => {
@@ -485,7 +492,7 @@ export class KycCaseManagementGraphql implements KycCaseManagementApi {
             .mutate<{approveCase: KycCaseModel}>({
                 mutation: APPROVE_CASE,
                 variables: {'case': input},
-                refetchQueries: [{query: LIST_CASES}, {query: GET_CASE, variables: {caseId: input.id}}],
+                refetchQueries: [{query: LIST_CASES}, this.buildGetCaseQuery(input.id)],
                 awaitRefetchQueries: true
             })
             .then(async (result: FetchResult<{approveCase: KycCaseModel}>) => {
@@ -500,8 +507,8 @@ export class KycCaseManagementGraphql implements KycCaseManagementApi {
             .mutate<{reviewCase: KycCaseModel}>({
                 mutation: REVIEW_CASE,
                 variables: {'case': input},
-                refetchQueries: [{query: LIST_CASES}, {query: GET_CASE, variables: {caseId: input.id}}],
-                awaitRefetchQueries: true
+                refetchQueries: [{query: LIST_CASES}, this.buildGetCaseQuery(input.id)],
+                awaitRefetchQueries: true,
             })
             .then(async (result: FetchResult<{reviewCase: KycCaseModel}>) => {
                 this.caseNotifySubject.next(result.data?.reviewCase.id || '');
@@ -510,12 +517,16 @@ export class KycCaseManagementGraphql implements KycCaseManagementApi {
             }) as Promise<KycCaseModel>
     }
 
+    buildGetCaseQuery(caseId: string) {
+        return {
+            query: GET_CASE,
+            variables: {caseId},
+        }
+    }
+
     getCase(caseId: string): Promise<KycCaseModel> {
         return this.client
-            .query<{getCase: KycCaseModel}>({
-                query: GET_CASE,
-                variables: {caseId},
-            })
+            .query<{getCase: KycCaseModel}>(this.buildGetCaseQuery(caseId))
             .then(result => result.data.getCase)
             .catch(err => {
                 console.log('Error getting case: ' + caseId, err)
@@ -541,7 +552,7 @@ export class KycCaseManagementGraphql implements KycCaseManagementApi {
             .mutate<{removeDocumentFromCase: KycCaseModel}>({
                 mutation: REMOVE_DOCUMENT_FROM_CASE,
                 variables: {caseId, documentId},
-                refetchQueries: [{query: LIST_CASES}, {query: GET_CASE, variables: {caseId}}],
+                refetchQueries: [{query: LIST_CASES}, this.buildGetCaseQuery(caseId)],
                 awaitRefetchQueries: true
             })
             .then(async (result: FetchResult<{removeDocumentFromCase: KycCaseModel}>) => {
@@ -559,7 +570,7 @@ export class KycCaseManagementGraphql implements KycCaseManagementApi {
             .mutate<{processCase: KycCaseModel}>({
                 mutation: PROCESS_CASE,
                 variables: {caseId},
-                refetchQueries: [{query: LIST_CASES}, {query: GET_CASE, variables: {caseId}}],
+                refetchQueries: [{query: LIST_CASES}, this.buildGetCaseQuery(caseId)],
                 awaitRefetchQueries: true
             })
             .then(async (result: FetchResult<{processCase: KycCaseModel}>) => {

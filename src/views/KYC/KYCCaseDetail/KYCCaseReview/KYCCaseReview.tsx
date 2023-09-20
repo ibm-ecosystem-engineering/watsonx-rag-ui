@@ -11,6 +11,8 @@ import {createEmptyReviewCase, KycCaseModel, ReviewCaseModel} from "../../../../
 import {KycCaseManagementApi, kycCaseManagementApi} from "../../../../services";
 import {handleFileUploaderChange} from "../util";
 import {leftOuter} from "../../../../utils";
+import {useSetAtom} from "jotai";
+import {selectedKycCaseAtom} from "../../../../atoms";
 
 export interface KYCCaseReviewProps {
     currentCase: KycCaseModel;
@@ -19,6 +21,7 @@ export interface KYCCaseReviewProps {
 
 export const KYCCaseReview: React.FunctionComponent<KYCCaseReviewProps> = (props: KYCCaseReviewProps) => {
     const navigate = useNavigate();
+    const setSelectedCase = useSetAtom(selectedKycCaseAtom)
     const [updatedCase, setUpdatedCase] = useState<ReviewCaseModel>(createEmptyReviewCase(props.currentCase.id))
     const [fileStatus, setFileStatus] = useState<'edit' | 'complete' | 'uploading'>('edit')
 
@@ -31,7 +34,9 @@ export const KYCCaseReview: React.FunctionComponent<KYCCaseReviewProps> = (props
     const handleSubmit = (event: {preventDefault: () => void}) => {
         event.preventDefault();
 
-        service.reviewCase(updatedCase).catch(err => console.error(err));
+        service.reviewCase(updatedCase)
+            .then(() => setSelectedCase(undefined))
+            .catch(err => console.error(err));
 
         navigate(props.returnUrl);
     }
