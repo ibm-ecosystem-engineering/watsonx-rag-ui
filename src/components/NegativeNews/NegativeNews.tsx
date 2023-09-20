@@ -13,6 +13,10 @@ export interface NegativeNewsProps {
 
 export const NegativeNews: React.FunctionComponent<NegativeNewsProps> = (props: NegativeNewsProps) => {
 
+    if (props.news && !props.news.result) {
+        return (<></>)
+    }
+
     const getContent = (): string => {
         if (!props.news) {
             return 'Pending'
