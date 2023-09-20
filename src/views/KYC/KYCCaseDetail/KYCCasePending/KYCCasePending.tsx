@@ -13,6 +13,7 @@ import {
     Stack
 } from "../../../../components";
 import {KycCaseModel} from "../../../../models";
+import {kycCaseManagementApi} from "../../../../services";
 
 export interface KYCCasePendingProps {
     currentCase: KycCaseModel;
@@ -21,9 +22,15 @@ export interface KYCCasePendingProps {
 
 export const KYCCasePending: React.FunctionComponent<KYCCasePendingProps> = (props: KYCCasePendingProps) => {
     const navigate = useNavigate();
+    const service = kycCaseManagementApi();
 
     const handleCancel = () => {
         navigate(props.returnUrl);
+    }
+
+    const handleRefresh = () => {
+        service.processCase(props.currentCase.id)
+            .catch(err => console.error('Error processing case: ', {err}))
     }
 
     return (
@@ -78,6 +85,7 @@ export const KYCCasePending: React.FunctionComponent<KYCCasePendingProps> = (pro
                     style={{marginBottom: '20px'}}
                 />
                 <DocumentList documents={props.currentCase.documents} />
+                <div><Button onClick={handleRefresh}>Refresh</Button></div>
                 <NegativeNews type="Party" news={props.currentCase.negativeScreening} />
                 <NegativeNews type="Counterparty" news={props.currentCase.counterpartyNegativeScreening} />
                 <CustomerRisk customerRisk={props.currentCase.customerRiskAssessment} />

@@ -157,4 +157,8 @@ export class KycCaseManagementMock implements KycCaseManagementApi {
 
     async reload() {
     }
+
+    async processCase() {
+        return undefined
+    }
 }

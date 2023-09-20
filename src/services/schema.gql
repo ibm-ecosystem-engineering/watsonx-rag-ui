@@ -101,6 +101,7 @@ type Mutation {
   addDocumentToCase(caseId: ID!, documentName: String!, documentUrl: String!): KycCase!
   approveCase(case: ApproveCaseInput!): KycCase!
   createCase(customer: CustomerInput!): KycCase!
+  processCase(id: ID!): KycCase!
   removeDocumentFromCase(caseId: ID!, documentId: ID!): KycCase!
   reviewCase(case: ReviewCaseInput!): KycCase!
 }

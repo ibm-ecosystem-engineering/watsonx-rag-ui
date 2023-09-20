@@ -350,6 +350,48 @@ const REMOVE_DOCUMENT_FROM_CASE = gql`
         }
     }
 `
+const PROCESS_CASE = gql`
+    mutation ProcessCase($caseId: ID!) {
+        processCase(id: $caseId) {
+            id
+            status
+            customer {
+                name
+                countryOfResidence
+                entityType
+                industryType
+            }
+            documents {
+                id
+                name
+                path
+            }
+            customerOutreach
+            counterparty {
+                name
+                countryOfResidence
+            }
+            negativeScreening {
+                result
+                error
+            }
+            counterpartyNegativeScreening {
+                result
+                error
+            }
+            customerRiskAssessment {
+                score
+                rating
+                error
+            }
+            caseSummary {
+                summary
+                error
+            }
+        }
+    }
+`
+
 
 export class KycCaseManagementGraphql implements KycCaseManagementApi {
     client: ApolloClient<unknown>;
@@ -510,6 +552,21 @@ export class KycCaseManagementGraphql implements KycCaseManagementApi {
     }
 
     async reload(): Promise<void> {
+    }
+
+    async processCase(caseId: string): Promise<KycCaseModel> {
+        return this.client
+            .mutate<{processCase: KycCaseModel}>({
+                mutation: PROCESS_CASE,
+                variables: {caseId},
+                refetchQueries: [{query: LIST_CASES}, {query: GET_CASE, variables: {caseId}}],
+                awaitRefetchQueries: true
+            })
+            .then(async (result: FetchResult<{processCase: KycCaseModel}>) => {
+                this.caseNotifySubject.next(result.data?.processCase.id || '');
+
+                return result.data?.processCase
+            }) as Promise<KycCaseModel>
     }
 
 }
