@@ -7,9 +7,9 @@ export default defineConfig(({mode}) => {
 
   const env = loadEnv(mode, process.cwd(), '')
 
-  const apiTarget: string = env.API_TARGET1 || 'http://localhost:3000';
-  const graphqlTarget: string = env.GRAPHQL_TARGET1 || 'http://localhost:3000';
-  const socketTarget: string = env.SOCKET_TARGET1 || 'ws://localhost:3000';
+  const apiTarget: string = env.API_TARGET || 'http://localhost:3000';
+  const graphqlTarget: string = env.GRAPHQL_TARGET || 'http://localhost:3000';
+  const socketTarget: string = env.SOCKET_TARGET || 'ws://localhost:3000';
 
   console.log('Target urls: ', {apiTarget, graphqlTarget, socketTarget, mode})
 
