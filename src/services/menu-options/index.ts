@@ -1,4 +1,4 @@
-import {MenuOptionsMock} from "./menu-options.mock.ts";
+import {MenuOptionsMock} from "./menu-options.mock";
 
 export * from './menu-options.api';
 

@@ -90,10 +90,10 @@ export interface DocumentInputModel {
 export const createEmptyCustomer = (): CustomerModel => {
     return {
         name: '',
-        countryOfResidence: 'US',
+        countryOfResidence: 'United States',
         personalIdentificationNumber: '',
-        industryType: '',
-        entityType: '',
+        industryType: 'Private Limited Company',
+        entityType: 'Growing of rice',
     }
 }
 
@@ -119,7 +119,7 @@ export const createEmptyReviewCase = (id: string): ReviewCaseModel => {
         id,
         counterparty: {
             name: '',
-            countryOfResidence: 'US'
+            countryOfResidence: 'United States'
         },
         customerOutreach: '',
         documents: []

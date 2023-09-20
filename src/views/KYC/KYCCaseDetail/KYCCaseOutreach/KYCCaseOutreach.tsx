@@ -39,7 +39,7 @@ export const KYCCaseOutreach: React.FunctionComponent<KYCCaseReviewProps> = (pro
     return (
         <Form onSubmit={handleSubmit}>
             <Stack gap={5}>
-                <h2>Initial Review</h2>
+                <h2>Outreach</h2>
                 <TextInput
                     helperText="The name of the customer"
                     id="caseCustomerName"

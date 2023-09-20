@@ -4,7 +4,14 @@ import React from 'react';
 import {useNavigate} from "react-router-dom";
 import {Button, Checkbox, TextInput} from "@carbon/react";
 
-import {CountrySelect, DocumentList, Stack} from "../../../../components";
+import {
+    CountrySelect,
+    CustomerRisk,
+    DocumentList,
+    EntityTypeSelect,
+    IndustryTypeSelect, KycSummary, NegativeNews,
+    Stack
+} from "../../../../components";
 import {KycCaseModel} from "../../../../models";
 
 export interface KYCCasePendingProps {
@@ -21,7 +28,7 @@ export const KYCCasePending: React.FunctionComponent<KYCCasePendingProps> = (pro
 
     return (
             <Stack gap={5}>
-                <h2>Initial Review</h2>
+                <h2>Pending information</h2>
                 <TextInput
                     helperText="The name of the customer"
                     id="caseCustomerName"
@@ -36,6 +43,16 @@ export const KYCCasePending: React.FunctionComponent<KYCCasePendingProps> = (pro
                     value={props.currentCase.customer.countryOfResidence}
                     readOnly={true}
                     style={{marginBottom: '20px'}}
+                />
+                <EntityTypeSelect
+                    id="caseCustomerEntityType"
+                    value={props.currentCase.customer.entityType}
+                    readOnly={true}
+                />
+                <IndustryTypeSelect
+                    id="caseCustomerIndustryType"
+                    value={props.currentCase.customer.industryType}
+                    readOnly={true}
                 />
                 <div style={{margin: '10px 0'}}>
                     <Checkbox
@@ -61,6 +78,10 @@ export const KYCCasePending: React.FunctionComponent<KYCCasePendingProps> = (pro
                     style={{marginBottom: '20px'}}
                 />
                 <DocumentList documents={props.currentCase.documents} />
+                <NegativeNews type="Party" news={props.currentCase.negativeScreening} />
+                <NegativeNews type="Counterparty" news={props.currentCase.counterpartyNegativeScreening} />
+                <CustomerRisk customerRisk={props.currentCase.customerRiskAssessment} />
+                <KycSummary kycSummary={props.currentCase.caseSummary} />
                 <div><Button kind="tertiary" onClick={handleCancel}>Return</Button></div>
             </Stack>
     )
