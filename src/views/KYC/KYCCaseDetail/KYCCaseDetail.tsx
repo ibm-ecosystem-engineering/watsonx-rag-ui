@@ -63,7 +63,7 @@ export const KYCCaseDetail: React.FunctionComponent<KYCCaseDetailProps> = (props
         return (<KYCCaseReview currentCase={selectedCase} returnUrl={props.basePath} />)
     }
 
-    if (selectedCase.status === 'Outreach') {
+    if (selectedCase.status === 'Outreach' || selectedCase.status === 'CustomerOutreach') {
         return (<KYCCaseOutreach currentCase={selectedCase} returnUrl={props.basePath} />)
     }
 

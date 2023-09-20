@@ -5,7 +5,7 @@ import {useNavigate} from "react-router-dom";
 import {Button, Checkbox, FileUploader, Form, TextInput} from "@carbon/react";
 
 import './KYCCaseOutreach.scss';
-import {CountrySelect, DocumentList, Stack} from "../../../../components";
+import {CountrySelect, DocumentList, EntityTypeSelect, IndustryTypeSelect, Stack} from "../../../../components";
 import {ApproveCaseModel, createEmptyApproveCase, KycCaseModel,} from "../../../../models";
 import {KycCaseManagementApi, kycCaseManagementApi} from "../../../../services";
 import {handleFileUploaderChange} from "../util";
@@ -59,6 +59,16 @@ export const KYCCaseOutreach: React.FunctionComponent<KYCCaseReviewProps> = (pro
                     value={props.currentCase.customer.countryOfResidence}
                     readOnly={true}
                     style={{marginBottom: '20px'}}
+                />
+                <EntityTypeSelect
+                    id="caseCustomerEntityType"
+                    value={props.currentCase.customer.entityType}
+                    readOnly={true}
+                />
+                <IndustryTypeSelect
+                    id="caseCustomerIndustryType"
+                    value={props.currentCase.customer.industryType}
+                    readOnly={true}
                 />
                 <div style={{margin: '10px 0'}}>
                     <Checkbox
