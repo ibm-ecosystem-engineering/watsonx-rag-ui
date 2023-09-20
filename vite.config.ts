@@ -7,9 +7,19 @@ export default defineConfig(({mode}) => {
 
   const env = loadEnv(mode, process.cwd(), '')
 
-  const apiTarget: string = env.API_TARGET || 'http://localhost:3000';
-  const graphqlTarget: string = env.GRAPHQL_TARGET || 'http://localhost:3000';
-  const socketTarget: string = env.SOCKET_TARGET || 'ws://localhost:3000';
+  const localMode: boolean = !!env.LOCAL
+
+  const getTarget = (value: string, localValue: string): string => {
+    if (localMode) {
+      return localValue;
+    }
+
+    return value || localValue;
+  }
+
+  const apiTarget: string = getTarget(env.API_TARGET, 'http://localhost:3000');
+  const graphqlTarget: string = getTarget(env.GRAPHQL_TARGET, 'http://localhost:3000');
+  const socketTarget: string = getTarget(env.SOCKET_TARGET, 'ws://localhost:3000');
 
   console.log('Target urls: ', {apiTarget, graphqlTarget, socketTarget, mode})
 
