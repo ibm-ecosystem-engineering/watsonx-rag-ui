@@ -4,12 +4,14 @@ import React from 'react';
 import {useAtomValue} from "jotai";
 import {DonutChart} from "@carbon/charts-react";
 
-import {KycCaseStatus, kycCaseStatusAtom} from "../../atoms";
+import {kycCasesLoadable, KycCaseStatus, kycCaseStatusAtom} from "../../atoms";
+import {Loading} from "@carbon/react";
 
 export interface DashboardProps {
 }
 
 export const Dashboard: React.FunctionComponent<DashboardProps> = () => {
+    const loadableKycCases = useAtomValue(kycCasesLoadable);
 
     const kycCaseStatus: KycCaseStatus[] = useAtomValue(kycCaseStatusAtom)
     const options = {
@@ -23,6 +25,9 @@ export const Dashboard: React.FunctionComponent<DashboardProps> = () => {
         height: '400px'
     }
 
+    if (loadableKycCases.state === 'loading') {
+        return (<Loading active={true} withOverlay={true} />)
+    }
 
     return (
         <div>

@@ -8,11 +8,16 @@ import './DocumentList.scss';
 import {DocumentModel} from "../../models";
 
 export interface DocumentListProps {
-    documents: DocumentModel[]
+    hideEmpty?: boolean;
+    documents: DocumentModel[];
 }
 
 export const DocumentList: React.FunctionComponent<DocumentListProps> = (props: DocumentListProps) => {
     if (!props.documents || props.documents.length === 0) {
+        if (props.hideEmpty) {
+            return (<></>)
+        }
+
         return (
             <div className="document-list">
             <div className="cds--form-item">

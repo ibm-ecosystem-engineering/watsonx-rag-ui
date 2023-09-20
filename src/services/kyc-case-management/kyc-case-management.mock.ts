@@ -1,8 +1,16 @@
 import {BehaviorSubject, Observable} from "rxjs";
 
 import {CaseNotFound, KycCaseManagementApi} from "./kyc-case-management.api";
-import {ApproveCaseModel, createNewCase, CustomerModel, KycCaseModel, ReviewCaseModel} from "../../models";
-import {delay, first} from "../../utils";
+import {
+    ApproveCaseModel,
+    createNewCase,
+    CustomerModel, DocumentContent,
+    DocumentModel, DocumentRef, DocumentStream, isDocumentContent, isDocumentRef,
+    KycCaseModel,
+    ReviewCaseModel
+} from "../../models";
+import {delay, first, streamToBuffer, urlToStream} from "../../utils";
+import Stream from "stream";
 
 const initialValue: KycCaseModel[] = [
     {
@@ -11,7 +19,8 @@ const initialValue: KycCaseModel[] = [
             name: 'John Doe',
             countryOfResidence: 'US',
             personalIdentificationNumber: '123458690',
-            riskCategory: 'Low'
+            entityType: '02',
+            industryType: '92.00',
         },
         status: 'New',
         documents: [],
@@ -22,7 +31,8 @@ const initialValue: KycCaseModel[] = [
             name: 'Jane Doe',
             countryOfResidence: 'CA',
             personalIdentificationNumber: 'AB1458690',
-            riskCategory: 'Low'
+            entityType: '03',
+            industryType: '10.82/2',
         },
         status: 'New',
         documents: [],
@@ -66,18 +76,33 @@ export class KycCaseManagementMock implements KycCaseManagementApi {
         return newCase;
     }
 
-    async addDocumentToCase(caseId: string, documentName: string, documentPath: string): Promise<KycCaseModel> {
+    async addDocumentToCase(caseId: string, documentName: string, document: DocumentRef | DocumentContent | DocumentStream): Promise<DocumentModel> {
         const currentCase = await this.getCase(caseId);
 
         currentCase.status = 'Pending';
 
         const id = '' + (currentCase.documents.length + 1);
+        const documentId = `${caseId}-${id}`;
+        const content = await this.loadDocument(document);
 
-        currentCase.documents.push({id: `${caseId}-${id}`, name: documentName, path: documentPath});
+        const doc = {id: documentId, name: documentName, path: `${documentId}/${documentName}`, content: content}
+        currentCase.documents.push(doc);
 
         this.subject.next(this.subject.value);
 
-        return currentCase;
+        return doc;
+    }
+
+    async loadDocument(document: DocumentRef | DocumentContent | DocumentStream): Promise<Buffer> {
+        if (isDocumentContent(document)) {
+            return document.content;
+        }
+
+        const stream: Stream = isDocumentRef(document)
+            ? await urlToStream(document.url)
+            : document.stream;
+
+        return streamToBuffer(stream);
     }
 
     async reviewCase(reviewCase: ReviewCaseModel): Promise<KycCaseModel> {
@@ -103,5 +128,33 @@ export class KycCaseManagementMock implements KycCaseManagementApi {
         this.subject.next(this.subject.value);
 
         return currentCase;
+    }
+
+    async getDocument(id: string): Promise<DocumentModel> {
+        const doc: DocumentModel = first(
+            this.subject.value
+                .map(kycCase => first(kycCase.documents.filter(tmp => tmp.id === id)).orElse(undefined))
+                .filter(doc => !!doc)
+        ).orElseThrow(() => new Error('Document not found: ' + id))
+
+        if (!doc) {
+            throw new Error('Document not found: ' + id);
+        }
+
+        return doc;
+    }
+
+    async removeDocumentFromCase(caseId: string, documentId: string): Promise<KycCaseModel> {
+        const currentCase = await this.getCase(caseId);
+
+        currentCase.documents = currentCase.documents
+            .filter(doc => doc.id !== documentId)
+
+        this.subject.next(this.subject.value);
+
+        return currentCase;
+    }
+
+    async reload() {
     }
 }

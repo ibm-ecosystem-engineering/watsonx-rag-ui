@@ -6,7 +6,7 @@ import {Button, Form, TextInput} from "@carbon/react";
 import PasswordInput from "@carbon/react/es/components/TextInput/PasswordInput";
 import {default as setValue} from 'set-value';
 
-import {CountrySelect, Stack} from "../../../../components";
+import {CountrySelect, EntityTypeSelect, IndustryTypeSelect, Stack} from "../../../../components";
 import {createEmptyCustomer, CustomerModel} from "../../../../models";
 import {kycCaseManagementApi} from "../../../../services";
 
@@ -75,14 +75,16 @@ export const KYCCaseNew: React.FunctionComponent<KYCCaseNewProps> = (props: KYCC
                     onChange={handleChange('personalIdentificationNumber')}
                     required={true}
                 />
-                <TextInput
-                    helperText="The current risk category of the customer"
-                    id="caseCustomerRiskCategory"
-                    invalidText="Invalid risk category"
-                    labelText="Current risk category"
-                    placeholder="Risk category"
-                    value={newCustomer.riskCategory}
-                    onChange={handleChange('riskCategory')}
+                <EntityTypeSelect
+                    id="caseCustomerEntityType"
+                    value={newCustomer.entityType}
+                    onChange={handleChange('entityType')}
+                    required={true}
+                />
+                <IndustryTypeSelect
+                    id="caseCustomerIndustryType"
+                    value={newCustomer.industryType}
+                    onChange={handleChange('industryType')}
                     required={true}
                 />
                 <div><Button kind="tertiary" onClick={handleCancel}>Cancel</Button> <Button type="submit">Submit</Button></div>

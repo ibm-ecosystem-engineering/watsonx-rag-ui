@@ -7,8 +7,9 @@ import {Button, Checkbox, FileUploader, Form, TextInput} from "@carbon/react";
 import './KYCCaseOutreach.scss';
 import {CountrySelect, DocumentList, Stack} from "../../../../components";
 import {ApproveCaseModel, createEmptyApproveCase, KycCaseModel,} from "../../../../models";
-import {kycCaseManagementApi} from "../../../../services";
-import {fileListUtil} from "../../../../utils";
+import {KycCaseManagementApi, kycCaseManagementApi} from "../../../../services";
+import {handleFileUploaderChange} from "../util";
+import {leftOuter} from "../../../../utils";
 
 export interface KYCCaseReviewProps {
     currentCase: KycCaseModel;
@@ -20,7 +21,7 @@ export const KYCCaseOutreach: React.FunctionComponent<KYCCaseReviewProps> = (pro
     const [updatedCase, setUpdatedCase] = useState<ApproveCaseModel>(createEmptyApproveCase(props.currentCase.id))
     const [fileStatus, setFileStatus] = useState<'edit' | 'complete' | 'uploading'>('edit')
 
-    const service = kycCaseManagementApi();
+    const service: KycCaseManagementApi = kycCaseManagementApi();
 
     const handleCancel = () => {
         navigate(props.returnUrl);
@@ -32,22 +33,6 @@ export const KYCCaseOutreach: React.FunctionComponent<KYCCaseReviewProps> = (pro
         service.approveCase(updatedCase).catch(err => console.error(err));
 
         navigate(props.returnUrl);
-    }
-
-    const handleFileUploaderChange = (event: {target: {files: FileList, filenameStatus: string}}) => {
-        const files: FileList = event.target.files;
-        const fileNames = fileListUtil(files).map(f => f.name)
-
-        console.log('File uploader: ', {event, files, fileNames});
-
-        setFileStatus('uploading')
-        setTimeout(() => setFileStatus('complete'), 1000)
-
-        // TODO handle document remove
-        const documents = updatedCase.documents.concat(fileNames.map(name => ({name, path: name, id: ''})))
-
-        setUpdatedCase(Object.assign({}, updatedCase, {documents}))
-
     }
 
 
@@ -69,15 +54,6 @@ export const KYCCaseOutreach: React.FunctionComponent<KYCCaseReviewProps> = (pro
                     value={props.currentCase.customer.countryOfResidence}
                     readOnly={true}
                     style={{marginBottom: '20px'}}
-                />
-                <TextInput
-                    helperText="The current risk category of the customer"
-                    id="caseCustomerRiskCategory"
-                    invalidText="Invalid risk category"
-                    labelText="Current risk category"
-                    placeholder="Risk category"
-                    value={props.currentCase.customer.riskCategory}
-                    readOnly={true}
                 />
                 <div style={{margin: '10px 0'}}>
                     <Checkbox
@@ -102,7 +78,7 @@ export const KYCCaseOutreach: React.FunctionComponent<KYCCaseReviewProps> = (pro
                     readOnly={true}
                     style={{marginBottom: '20px'}}
                 />
-                <DocumentList documents={props.currentCase.documents} />
+                <DocumentList documents={leftOuter(props.currentCase.documents, updatedCase.documents)} />
                 <FileUploader
                     labelTitle="Add documents"
                     labelDescription="Max file size is 500mb."
@@ -114,7 +90,7 @@ export const KYCCaseOutreach: React.FunctionComponent<KYCCaseReviewProps> = (pro
                     multiple={true}
                     disabled={false}
                     iconDescription="Delete file"
-                    onChange={handleFileUploaderChange}
+                    onChange={handleFileUploaderChange(props.currentCase.id, updatedCase, setUpdatedCase, setFileStatus)}
                     name="" />
                 <div><Button kind="tertiary" onClick={handleCancel}>Cancel</Button> <Button type="submit">Submit</Button></div>
             </Stack>

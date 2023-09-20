@@ -4,6 +4,9 @@ import {atomWithObservable, loadable} from "jotai/utils";
 import {kycCaseManagementApi} from "../services";
 import {KycCaseModel} from "../models";
 
+const kycCasesAtom = atom(() => kycCaseManagementApi().listCases())
+export const kycCasesLoadable = loadable(kycCasesAtom)
+
 export const kycCaseAtom: Atom<KycCaseModel[]> = atomWithObservable(
     () => kycCaseManagementApi().subscribeToCases(),
     {initialValue: []}
