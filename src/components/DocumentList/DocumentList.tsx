@@ -33,7 +33,7 @@ export const DocumentList: React.FunctionComponent<DocumentListProps> = (props: 
             <div className="cds--form-item">
                 <label className="cds-label">Documents</label>
                 <UnorderedList className="document-list-ul" isExpressive={true} nested={false}>
-                    {props.documents.map(doc => (<ListItem key={doc.id}><a href={doc.path}>{doc.name}</a></ListItem>))}
+                    {props.documents.map(doc => (<ListItem key={doc.id}><a href={`/api/${doc.path}`}>{doc.name}</a></ListItem>))}
                 </UnorderedList>
             </div>
         </div>
