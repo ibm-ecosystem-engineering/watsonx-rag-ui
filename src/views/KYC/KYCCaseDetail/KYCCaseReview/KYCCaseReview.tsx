@@ -7,7 +7,7 @@ import {default as setValue} from "set-value";
 
 import './KYCCaseReview.scss';
 import {CountrySelect, DocumentList, EntityTypeSelect, IndustryTypeSelect, Stack} from "../../../../components";
-import {createEmptyReviewCase, KycCaseModel, ReviewCaseModel} from "../../../../models";
+import {createEmptyReviewCase, FormOptionModel, KycCaseModel, ReviewCaseModel} from "../../../../models";
 import {KycCaseManagementApi, kycCaseManagementApi} from "../../../../services";
 import {handleFileUploaderChange} from "../util";
 import {leftOuter} from "../../../../utils";
@@ -50,14 +50,22 @@ export const KYCCaseReview: React.FunctionComponent<KYCCaseReviewProps> = (props
         setUpdatedCase(copy);
     }
 
+    const getValue = (event: ChangeEvent<HTMLInputElement> | {selectedItem: FormOptionModel}): string => {
+        if ((event as ChangeEvent<HTMLInputElement>).target) {
+            return (event as ChangeEvent<HTMLInputElement>).target.value
+        }
+
+        return (event as {selectedItem: FormOptionModel}).selectedItem?.value
+    }
+
     const handleChange = (key: string) => {
-        return (event: ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
+        return (event: ChangeEvent<HTMLInputElement> | {selectedItem: FormOptionModel}) => {
 
-            const copy = JSON.parse(JSON.stringify(updatedCase));
+            const modifiedCase = JSON.parse(JSON.stringify(updatedCase));
 
-            setValue(copy, key, event.target.value);
+            setValue(modifiedCase, key, getValue(event));
 
-            setUpdatedCase(copy);
+            setUpdatedCase(modifiedCase);
         }
     }
 
@@ -111,13 +119,14 @@ export const KYCCaseReview: React.FunctionComponent<KYCCaseReviewProps> = (props
                 onChange={handleChange('counterparty.name')}
                 required={true}
             />
+            <div style={{paddingBottom: '10px'}}>
             <CountrySelect
                 id="caseCounterpartyCountry"
                 value={updatedCase.counterparty?.countryOfResidence || 'US'}
                 onChange={handleChange('counterparty.countryOfResidence')}
                 required={true}
-                style={{marginBottom: '20px'}}
             />
+            </div>
             <DocumentList hideEmpty={true} documents={leftOuter(props.currentCase.documents, updatedCase.documents)} />
             <FileUploader
                 labelTitle="Add documents"

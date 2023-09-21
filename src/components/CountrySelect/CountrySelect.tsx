@@ -4,16 +4,16 @@ import React from 'react';
 import {useAtomValue} from "jotai";
 import {Loadable} from "jotai/vanilla/utils/loadable";
 
-import {AtomSelect, SpecificAtomSelectProps} from "../AtomSelect";
+import {AtomComboBox, SpecificAtomComboBoxProps} from "../AtomComboBox";
 import {countriesAtomLoadable} from "../../atoms";
 import {FormOptionModel} from "../../models";
 
 
-export const CountrySelect: React.FunctionComponent<SpecificAtomSelectProps> = (props: SpecificAtomSelectProps) => {
+export const CountrySelect: React.FunctionComponent<SpecificAtomComboBoxProps> = (props: SpecificAtomComboBoxProps) => {
     const countriesLoadable: Loadable<Promise<FormOptionModel[]>> = useAtomValue(countriesAtomLoadable);
 
     return (
-        <AtomSelect
+        <AtomComboBox
             id={props.id}
             invalidText="Invalid country selected"
             labelText="Country of residence"

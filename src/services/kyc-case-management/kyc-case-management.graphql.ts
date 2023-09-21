@@ -416,11 +416,7 @@ export class KycCaseManagementGraphql implements KycCaseManagementApi {
             .query<{listCases: KycCaseModel[]}>({
                 query: LIST_CASES,
             })
-            .then(result => {
-                console.log('Cases returned: ', {cases: result.data.listCases});
-
-                return result.data.listCases;
-            })
+            .then(result => result.data.listCases)
             .catch(err => {
                 console.log('Error querying cases: ', err)
                 throw err

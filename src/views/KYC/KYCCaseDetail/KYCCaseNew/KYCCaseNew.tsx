@@ -7,7 +7,7 @@ import PasswordInput from "@carbon/react/es/components/TextInput/PasswordInput";
 import {default as setValue} from 'set-value';
 
 import {CountrySelect, EntityTypeSelect, IndustryTypeSelect, Stack} from "../../../../components";
-import {createEmptyCustomer, CustomerModel} from "../../../../models";
+import {createEmptyCustomer, CustomerModel, FormOptionModel} from "../../../../models";
 import {kycCaseManagementApi} from "../../../../services";
 
 export interface KYCCaseNewProps {
@@ -33,12 +33,20 @@ export const KYCCaseNew: React.FunctionComponent<KYCCaseNewProps> = (props: KYCC
         navigate(props.returnUrl);
     }
 
+    const getValue = (event: ChangeEvent<HTMLInputElement> | {selectedItem: FormOptionModel}): string => {
+        if ((event as ChangeEvent<HTMLInputElement>).target) {
+            return (event as ChangeEvent<HTMLInputElement>).target.value
+        }
+
+        return (event as {selectedItem: FormOptionModel}).selectedItem?.value
+    }
+
     const handleChange = (key: keyof CustomerModel) => {
-        return (event: ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
+        return (event: ChangeEvent<HTMLInputElement> | {selectedItem: FormOptionModel}) => {
 
             const updatedCase = JSON.parse(JSON.stringify(newCustomer));
 
-            setValue(updatedCase, key, event.target.value);
+            setValue(updatedCase, key, getValue(event));
 
             setNewCustomer(updatedCase);
         }
