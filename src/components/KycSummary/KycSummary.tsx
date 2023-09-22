@@ -27,7 +27,7 @@ export const KycSummary: React.FunctionComponent<KycSummaryProps> = (props: KycS
     return (
         <div style={{width: '100%', textAlign: 'left'}}>
             <div className="kycSummaryTitle">KYC Summary</div>
-            <div>{getContent()}</div>
+            <p>{getContent()}</p>
         </div>
     )
 }

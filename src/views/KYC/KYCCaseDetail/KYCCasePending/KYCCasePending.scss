@@ -1,0 +1,16 @@
+
+.label {
+  font-weight: bold;
+  padding-right: 10px;
+}
+
+.infoBox {
+  display: flex;
+  justify-content: left;
+  align-content: flex-start;
+  border-color: #000;
+  border-width: 1px;
+  border-style: solid;
+  padding: 10px 10px;
+  text-align: left;
+}
