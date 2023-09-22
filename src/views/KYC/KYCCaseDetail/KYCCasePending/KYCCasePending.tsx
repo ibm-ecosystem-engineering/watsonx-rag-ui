@@ -9,12 +9,7 @@ import {Error, Pending} from "@carbon/icons-react";
 import './KYCCasePending.scss';
 import {selectedKycCaseAtom} from "../../../../atoms";
 import {CustomerRisk, DocumentList, KycSummary, NegativeNews, Stack} from "../../../../components";
-import {
-    CustomerRiskAssessmentModel, isCustomerRiskAssessmentModel, isKycCaseSummaryModel, isNegativeScreeningModel,
-    KycCaseModel,
-    KycCaseSummaryModel,
-    NegativeScreeningModel
-} from "../../../../models";
+import {KycCaseModel} from "../../../../models";
 import {kycCaseManagementApi} from "../../../../services";
 
 export interface KYCCasePendingProps {
@@ -40,11 +35,11 @@ export const KYCCasePending: React.FunctionComponent<KYCCasePendingProps> = (pro
     const getIcon = (data?: {error?: string}): ComponentType<{size: number}> => {
 
         if (!data) {
-            return Pending as any;
+            return Pending as never;
         }
 
         if (data.error) {
-            return Error as any;
+            return Error as never;
         }
 
         return undefined
