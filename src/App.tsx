@@ -3,14 +3,30 @@
 import React from "react";
 import {Route, Routes} from "react-router-dom";
 import {Notification, Search, User} from "@carbon/icons-react";
+import {useAtomValue, useSetAtom, useAtom} from "jotai";
+import {Loading} from "@carbon/react";
 
 import './App.css'
+import {activeItemAtom, currentUserAtom, currentUserAtomLoadable} from "./atoms";
 import {NotFound, UIShell} from "./components";
-import {CustomerRisk, Dashboard, KYC, KYCCaseDetail, KYCCaseList, KycSummarize, RTCQC, Utilities} from "./views";
 import {MenuLinksModel, NavigationModel} from "./models";
-import {DataExtraction} from "./views/DataExtraction";
+import {
+    CustomerRisk,
+    Dashboard,
+    DataExtraction,
+    KYC,
+    KYCCaseDetail,
+    KYCCaseList,
+    KycSummarize,
+    Login,
+    RTCQC,
+    Utilities
+} from "./views";
 
 function App() {
+    const setCurrentUser = useSetAtom(currentUserAtom);
+    const loadable = useAtomValue(currentUserAtomLoadable)
+    const [activeItem, setActiveItem] = useAtom(activeItemAtom)
 
     const menuLinks: MenuLinksModel[] = [
         {title: 'Dashboard', href: '/', element: <Dashboard />},
@@ -43,7 +59,9 @@ function App() {
             {title: 'Notifications', action: (<Notification size={20} />)},
             {title: 'User Profile', action: (<User size={20} />)}
         ],
-        sideNav: menuLinks.map(link => ({title: link.title, href: link.href}))
+        sideNav: menuLinks
+            .filter(link => !link.excludeFromMenu)
+            .map(link => ({title: link.title, href: link.href}))
     }
 
     const renderMenuLinks = (menuLinks: MenuLinksModel[]) => {
@@ -68,16 +86,26 @@ function App() {
             })
     }
 
-  return (
-    <div>
-        <UIShell prefix="watsonx" navigation={navigation}>
-            <Routes>
-                {renderMenuLinks(menuLinks)}
-                <Route key="route-all" path="*" element={<NotFound />} />
-            </Routes>
-        </UIShell>
-    </div>
-  )
+    if (loadable.state === 'loading' || loadable.state === 'hasError') {
+        return (<Loading active={true} description="Login loading" id="login-loading" withOverlay={true} />)
+    }
+
+    const currentUser = loadable.data;
+
+    if (!currentUser) {
+        return (<Login setCurrentUser={setCurrentUser} />)
+    }
+
+    return (
+        <div>
+            <UIShell prefix="watsonx" navigation={navigation} activeItem={activeItem} setActiveItem={setActiveItem}>
+                <Routes>
+                    {renderMenuLinks(menuLinks)}
+                    <Route key="route-all" path="*" element={<NotFound />} />
+                </Routes>
+            </UIShell>
+        </div>
+    )
 }
 
 export default App
