@@ -6,7 +6,7 @@ import {Notification, Search, User} from "@carbon/icons-react";
 
 import './App.css'
 import {NotFound, UIShell} from "./components";
-import {CustomerRisk, Dashboard, KYC, KYCCaseDetail, KYCCaseList, RTCQC, Utilities} from "./views";
+import {CustomerRisk, Dashboard, KYC, KYCCaseDetail, KYCCaseList, KycSummarize, RTCQC, Utilities} from "./views";
 import {MenuLinksModel, NavigationModel} from "./models";
 import {DataExtraction} from "./views/DataExtraction";
 
@@ -25,6 +25,7 @@ function App() {
         },
         {title: 'Customer Risk', href: '/customer-risk', element: <CustomerRisk />},
         {title: 'RTC - QC', href: '/rtc-qc', element: <RTCQC />},
+        {title: 'KYC Summarization', href: '/kyc-summarization', element: <KycSummarize />},
         {
             title: 'Utilities',
             href: '/utilities',

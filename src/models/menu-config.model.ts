@@ -9,4 +9,5 @@ export interface MenuConfigModel {
     negativeScreeningApiUrl: string
     customerRiskAssessmentApiUrl: string
     kycCaseSummaryApiUrl: string
+    kycSummarizationUrl: string
 }

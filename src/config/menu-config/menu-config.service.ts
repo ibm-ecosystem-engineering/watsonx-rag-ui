@@ -13,7 +13,8 @@ export class MenuConfigService implements MenuConfigApi {
             assessmentRulesStudioUrl: 'https://cpd-cp4ba.cp4ba-cra-c6c44da74def18a795b07cc32856e138-0000.us-south.containers.appdomain.cloud/',
             negativeScreeningApiUrl: '',
             customerRiskAssessmentApiUrl: '',
-            kycCaseSummaryApiUrl: ''
+            kycCaseSummaryApiUrl: '',
+            kycSummarizationUrl: 'https://ey-kyc-summary.17lppvsmkk7n.us-south.codeengine.appdomain.cloud/',
         }
     }
 }
