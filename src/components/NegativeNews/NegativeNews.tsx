@@ -8,6 +8,7 @@ import {NegativeScreeningModel} from "../../models";
 
 export interface NegativeNewsProps {
     type: string;
+    hideTitle?: boolean;
     news?: NegativeScreeningModel;
 }
 
@@ -31,7 +32,7 @@ export const NegativeNews: React.FunctionComponent<NegativeNewsProps> = (props: 
 
     return (
         <div style={{width: '100%', textAlign: 'left'}}>
-            <div className="negNewsTitle">Negative news - {props.type}</div>
+            {!props.hideTitle ? (<div className="negNewsTitle">Negative news - {props.type}</div>) : (<></>)}
             <div>{getContent()}</div>
         </div>
     )

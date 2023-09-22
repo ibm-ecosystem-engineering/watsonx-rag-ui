@@ -5,14 +5,16 @@ import React from 'react';
 
 import './CustomerRisk.scss';
 import {CustomerRiskAssessmentModel} from "../../models";
+import {Stack} from "../Stack";
 
 export interface CustomerRiskProps {
+    hideTitle?: boolean;
     customerRisk?: CustomerRiskAssessmentModel
 }
 
 export const CustomerRisk: React.FunctionComponent<CustomerRiskProps> = (props: CustomerRiskProps) => {
 
-    const getContent = (): string => {
+    const getContent = () => {
         if (!props.customerRisk) {
             return 'Pending'
         }
@@ -21,13 +23,17 @@ export const CustomerRisk: React.FunctionComponent<CustomerRiskProps> = (props: 
             return 'Error'
         }
 
-        return `${props.customerRisk.rating} - ${props.customerRisk.score}`
+        return (
+            <Stack gap={3}>
+                <div><span className="label">Rating:</span>{props.customerRisk.rating}</div>
+                <div><span className="label">Score:</span>{props.customerRisk.score}</div>
+            </Stack>)
     }
 
     return (
         <div style={{width: '100%', textAlign: 'left'}}>
-            <div className="craTitle">Customer risk</div>
-            <div>{getContent()}</div>
+            {!props.hideTitle ? (<div className="craTitle">Customer risk</div>) : (<></>)}
+            <div className="summary">{getContent()}</div>
         </div>
     )
 }

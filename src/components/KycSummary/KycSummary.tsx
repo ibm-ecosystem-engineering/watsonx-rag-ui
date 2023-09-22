@@ -7,6 +7,7 @@ import './KycSummary.scss';
 import {KycCaseSummaryModel} from "../../models";
 
 export interface KycSummaryProps {
+    hideTitle?: boolean;
     kycSummary: KycCaseSummaryModel;
 }
 
@@ -24,10 +25,12 @@ export const KycSummary: React.FunctionComponent<KycSummaryProps> = (props: KycS
         return props.kycSummary.summary || '--'
     }
 
+    const content = getContent().split('\n')
+
     return (
         <div style={{width: '100%', textAlign: 'left'}}>
-            <div className="kycSummaryTitle">KYC Summary</div>
-            <p>{getContent()}</p>
+            {!props.hideTitle ? (<div className="kycSummaryTitle">KYC Summary</div>) : (<></>)}
+            {content.map((val, index) => (<p key={index} className="summary">{val}</p>))}
         </div>
     )
 }

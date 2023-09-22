@@ -34,10 +34,18 @@ export interface NegativeScreeningModel {
     error?: string;
 }
 
+export const isNegativeScreeningModel = (val: unknown): val is NegativeScreeningModel => {
+    return !!val && !!(val as NegativeScreeningModel).result
+}
+
 export interface CustomerRiskAssessmentModel {
     rating: string;
     score: number;
     error?: string;
+}
+
+export const isCustomerRiskAssessmentModel = (val: unknown): val is CustomerRiskAssessmentModel => {
+    return !!val && !!(val as CustomerRiskAssessmentModel).score
 }
 
 export interface ReviewCaseModel {
@@ -56,6 +64,10 @@ export interface ApproveCaseModel {
 export interface KycCaseSummaryModel {
     summary: string;
     error?: string;
+}
+
+export const isKycCaseSummaryModel = (val: unknown): val is KycCaseSummaryModel => {
+    return !!val && !!(val as KycCaseSummaryModel).summary
 }
 
 export interface DocumentRef {
