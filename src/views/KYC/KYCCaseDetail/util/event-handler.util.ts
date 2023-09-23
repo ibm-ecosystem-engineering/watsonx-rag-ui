@@ -1,8 +1,8 @@
-import {DocumentedCase, DocumentModel} from "../../../../models";
-import {fileUploadApi, FileUploadApi} from "../../../../services";
+import {DocumentModel} from "../../../../models";
+import {fileUploadApi, FileUploadApi, FileUploadContext} from "../../../../services";
 import {fileListUtil} from "../../../../utils";
 
-export const handleFileUploaderChange = <T extends DocumentedCase> (caseId: string, updatedCase: T, setUpdatedCase, setFileStatus) => {
+export const handleFileUploaderChange = (id: string, handleNewDocuments: (newDocuments: DocumentModel[]) => void, setFileStatus: (status: unknown) => void, context: FileUploadContext = 'kyc-case') => {
     const fileUploadService: FileUploadApi = fileUploadApi();
 
     return (event: {target: {files: FileList, filenameStatus: string}}) => {
@@ -14,17 +14,13 @@ export const handleFileUploaderChange = <T extends DocumentedCase> (caseId: stri
         setFileStatus('uploading')
 
         // TODO handle document remove
-        Promise.all(files.map(f => fileUploadService.uploadFile(caseId, f.name, f)))
+        Promise.all(files.map(f => fileUploadService.uploadFile(id, f.name, f, context)))
             .then((result: DocumentModel[]) => {
                 setFileStatus('complete');
 
                 return result.filter(doc => !!doc);
             })
-            .then((newDocuments: DocumentModel[]) => {
-                const documents = updatedCase.documents.concat(newDocuments)
-
-                setUpdatedCase(Object.assign({}, updatedCase, {documents}))
-            })
+            .then(handleNewDocuments)
             .catch(() => setFileStatus('error'))
     }
 }

@@ -2,7 +2,17 @@
 // @ts-ignore
 import React, {ChangeEvent, FormEvent, useState} from 'react';
 import {useAtomValue, useSetAtom} from "jotai";
-import {Button, Checkbox, DataTableHeader, Form, FormGroup, Loading, TextInput} from "@carbon/react";
+import {
+    Button,
+    Checkbox, Column,
+    DataTableHeader,
+    FileUploader,
+    Form,
+    FormGroup,
+    Grid,
+    Loading,
+    TextInput
+} from "@carbon/react";
 
 import './DataExtraction.scss';
 import {
@@ -14,6 +24,7 @@ import {DataExtractionApi, dataExtractionApi} from "../../services";
 import {DataTable, Stack} from "../../components";
 import {DataExtractionQuestionModel} from "../../models";
 import {Loadable} from "jotai/vanilla/utils/loadable";
+import {handleFileUploaderChange} from "../KYC/KYCCaseDetail/util";
 
 export interface DataExtractionProps {
 }
@@ -37,6 +48,7 @@ const createEmptyDataExtractionValues = (questionLoadable: Loadable<Promise<Data
 export const DataExtraction: React.FunctionComponent<DataExtractionProps> = () => {
     const questionLoadable = useAtomValue(dataExtractionQuestionAtomLoadable)
     const [dataExtraction, setDataExtraction] = useState<DataExtractionValues>(createEmptyDataExtractionValues(questionLoadable))
+    const [fileStatus, setFileStatus] = useState<'edit' | 'complete' | 'uploading'>('edit')
     const setResults = useSetAtom(dataExtractionResultsAtom)
 
     const service: DataExtractionApi = dataExtractionApi()
@@ -116,7 +128,9 @@ export const DataExtraction: React.FunctionComponent<DataExtractionProps> = () =
                     onChange={handleCustomer}
                     required={true}
                 />
-                <FormGroup legendText="Select checklist" style={{textAlign: 'left'}}>
+                <Grid narrow style={{padding: '0'}}>
+                    <Column sm={16} md={8}>
+                <FormGroup legendText="Select checklist" style={{textAlign: 'left', paddingBottom: '15px'}}>
                     {questions.map(question => {
                         return (<Checkbox
                             id={'question-' + question.id}
@@ -127,6 +141,25 @@ export const DataExtraction: React.FunctionComponent<DataExtractionProps> = () =
                         />)
                     })}
                 </FormGroup>
+                    </Column>
+                    <Column sm={16} md={8}>
+                <FormGroup legendText="Upload files to Discovery" style={{textAlign: 'left'}}>
+                <FileUploader
+                    labelTitle="Add documents"
+                    labelDescription="Max file size is 500mb."
+                    buttonLabel="Add file"
+                    buttonKind="primary"
+                    size="md"
+                    filenameStatus={fileStatus}
+                    // accept={['.jpg', '.png', '.pdf']}
+                    multiple={true}
+                    disabled={false}
+                    iconDescription="Delete file"
+                    onChange={handleFileUploaderChange('0', () => {}, setFileStatus, 'data-extraction')}
+                    name="" />
+                </FormGroup>
+                    </Column>
+                </Grid>
                 <div><Button kind="tertiary" onClick={handleReset}>Reset</Button> <Button type="submit">Submit</Button></div>
             </Stack>
         </Form>

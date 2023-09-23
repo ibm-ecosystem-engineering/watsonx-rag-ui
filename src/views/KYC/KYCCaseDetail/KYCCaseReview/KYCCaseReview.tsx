@@ -7,7 +7,7 @@ import {default as setValue} from "set-value";
 
 import './KYCCaseReview.scss';
 import {CountrySelect, DocumentList, EntityTypeSelect, IndustryTypeSelect, Stack} from "../../../../components";
-import {createEmptyReviewCase, FormOptionModel, KycCaseModel, ReviewCaseModel} from "../../../../models";
+import {createEmptyReviewCase, DocumentModel, FormOptionModel, KycCaseModel, ReviewCaseModel} from "../../../../models";
 import {KycCaseManagementApi, kycCaseManagementApi} from "../../../../services";
 import {handleFileUploaderChange} from "../util";
 import {leftOuter} from "../../../../utils";
@@ -67,6 +67,12 @@ export const KYCCaseReview: React.FunctionComponent<KYCCaseReviewProps> = (props
 
             setUpdatedCase(modifiedCase);
         }
+    }
+
+    const handleDocuments = (newDocuments: DocumentModel[]) => {
+        const documents = updatedCase.documents.concat(newDocuments)
+
+        setUpdatedCase(Object.assign({}, updatedCase, {documents}))
     }
 
     return (
@@ -139,7 +145,7 @@ export const KYCCaseReview: React.FunctionComponent<KYCCaseReviewProps> = (props
                 multiple={true}
                 disabled={false}
                 iconDescription="Delete file"
-                onChange={handleFileUploaderChange(props.currentCase.id, updatedCase, setUpdatedCase, setFileStatus)}
+                onChange={handleFileUploaderChange(props.currentCase.id, handleDocuments, setFileStatus, 'data-extraction')}
                 name="" />
             <div><Button kind="tertiary" onClick={handleCancel}>Cancel</Button> <Button type="submit">Submit</Button></div>
         </Stack>
