@@ -25,6 +25,7 @@ import {DataTable, Stack} from "../../components";
 import {DataExtractionQuestionModel} from "../../models";
 import {Loadable} from "jotai/vanilla/utils/loadable";
 import {handleFileUploaderChange} from "../KYC/KYCCaseDetail/util";
+import {WebChatConfig, WebChatContainer} from "@ibm-watson/assistant-web-chat-react";
 
 export interface DataExtractionProps {
 }
@@ -113,6 +114,12 @@ export const DataExtraction: React.FunctionComponent<DataExtractionProps> = () =
         setResults(Promise.resolve([]))
     }
 
+    const webChatConfig: WebChatConfig = {
+        integrationID: '76f5a344-3d6e-4e87-89d4-ec4fb39ee08a', // The ID of this integration.
+        region: 'us-south', // The region your integration is hosted in.
+        serviceInstanceID: '683c39a0-98db-4651-b97d-49f770fb058c', // The ID of your service instance.
+    }
+
     return (
         <div>
         <Form onSubmit={handleSubmit}>
@@ -163,6 +170,7 @@ export const DataExtraction: React.FunctionComponent<DataExtractionProps> = () =
                 <div><Button kind="tertiary" onClick={handleReset}>Reset</Button> <Button type="submit">Submit</Button></div>
             </Stack>
         </Form>
+            <WebChatContainer config={webChatConfig} />
             <DataExtractionResults />
         </div>
     )

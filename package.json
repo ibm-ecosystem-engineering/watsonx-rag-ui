@@ -15,6 +15,7 @@
     "@carbon/grid": "^11.20.0",
     "@carbon/icons-react": "^11.27.0",
     "@carbon/react": "^1.38.0",
+    "@ibm-watson/assistant-web-chat-react": "^1.0.4",
     "dayjs": "^1.11.10",
     "graphql-ws": "^5.14.0",
     "jotai": "^2.4.2",
