@@ -44,6 +44,7 @@ const DATA_EXTRACTION_QUESTIONS = gql`
             inScope
             expectedResponse
             watsonxResponse
+            prompt
         }
     }
 `
@@ -59,6 +60,7 @@ const DATA_EXTRACTION_QUESTION = gql`
             inScope
             expectedResponse
             watsonxResponse
+            prompt
         }
     }
 `

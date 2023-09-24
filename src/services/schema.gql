@@ -49,6 +49,7 @@ type DataExtractionResult {
   expectedResponse: String!
   id: ID!
   inScope: Boolean!
+  prompt: String!
   question: String!
   watsonxResponse: String!
 }
