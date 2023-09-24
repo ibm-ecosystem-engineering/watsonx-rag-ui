@@ -6,7 +6,7 @@ import {Button, Checkbox, FileUploader, Form, TextInput} from "@carbon/react";
 
 import './KYCCaseOutreach.scss';
 import {CountrySelect, DocumentList, EntityTypeSelect, IndustryTypeSelect, Stack} from "../../../../components";
-import {ApproveCaseModel, createEmptyApproveCase, KycCaseModel,} from "../../../../models";
+import {ApproveCaseModel, createEmptyApproveCase, DocumentModel, KycCaseModel,} from "../../../../models";
 import {KycCaseManagementApi, kycCaseManagementApi} from "../../../../services";
 import {handleFileUploaderChange} from "../util";
 import {leftOuter} from "../../../../utils";
@@ -38,6 +38,12 @@ export const KYCCaseOutreach: React.FunctionComponent<KYCCaseReviewProps> = (pro
             .catch(err => console.error(err));
 
         navigate(props.returnUrl);
+    }
+
+    const handleDocuments = (newDocuments: DocumentModel[]) => {
+        const documents = updatedCase.documents.concat(newDocuments)
+
+        setUpdatedCase(Object.assign({}, updatedCase, {documents}))
     }
 
 
@@ -105,7 +111,7 @@ export const KYCCaseOutreach: React.FunctionComponent<KYCCaseReviewProps> = (pro
                     multiple={true}
                     disabled={false}
                     iconDescription="Delete file"
-                    onChange={handleFileUploaderChange(props.currentCase.id, updatedCase, setUpdatedCase, setFileStatus)}
+                    onChange={handleFileUploaderChange(props.currentCase.id, handleDocuments, setFileStatus, 'data-extraction')}
                     name="" />
                 <div><Button kind="tertiary" onClick={handleCancel}>Cancel</Button> <Button type="submit">Submit</Button></div>
             </Stack>
