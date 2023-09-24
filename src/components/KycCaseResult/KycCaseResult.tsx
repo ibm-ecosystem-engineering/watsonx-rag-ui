@@ -44,10 +44,10 @@ export const KycCaseResult: React.FunctionComponent<KycCaseResultProps> = (props
     if (printMode) {
         return (
             <>
-            <CustomerRisk customerRisk={props.currentCase.customerRiskAssessment} />
-            <NegativeNews type="Party" news={props.currentCase.negativeScreening} />
-            <NegativeNews type="Counterparty" news={props.currentCase.counterpartyNegativeScreening} />
-            <KycSummary kycSummary={props.currentCase.caseSummary} />
+                <CustomerRisk customerRisk={props.currentCase.customerRiskAssessment} />
+                <KycSummary kycSummary={props.currentCase.caseSummary} />
+                <NegativeNews type="Party" news={props.currentCase.negativeScreening} />
+                <NegativeNews type="Counterparty" news={props.currentCase.counterpartyNegativeScreening} />
             </>
         )
     }

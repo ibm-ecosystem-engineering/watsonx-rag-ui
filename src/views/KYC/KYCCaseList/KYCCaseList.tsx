@@ -7,7 +7,7 @@ import {useAtomValue} from "jotai";
 import '../KYC.scss';
 import {countriesAtomLoadable, kycCaseAtom, kycCasesLoadable} from "../../../atoms";
 import {DataTable} from "../../../components";
-import {CustomerRiskAssessmentModel, FormOptionModel, KycCaseModel} from "../../../models";
+import {CustomerRiskAssessmentModel, FormOptionModel, KycCaseModel, NegativeScreeningModel} from "../../../models";
 import {first} from "../../../utils";
 import {Loading} from "@carbon/react";
 
@@ -44,6 +44,14 @@ const craToString = (riskAssessment?: CustomerRiskAssessmentModel) => {
     return `${riskAssessment.rating} (${riskAssessment.score})`
 }
 
+const summariseNegativeScreening = (news?: NegativeScreeningModel): string => {
+    if (!news?.summary) {
+        return '--'
+    }
+
+    return `Neg: ${news.negativeNewsCount}, Pos: ${news.nonNegativeNewsCount}, Unrelated: ${news.unrelatedNewsCount}`
+}
+
 const kycCaseModelToTableModel = (countries: FormOptionModel[] = []) => {
     return (model: KycCaseModel): KycCaseTableModel => {
         return {
@@ -52,8 +60,8 @@ const kycCaseModelToTableModel = (countries: FormOptionModel[] = []) => {
             country: mapCountry(model.customer.countryOfResidence, countries),
             status: model.status,
             customerOutreach: model.customerOutreach || 'N/A',
-            negativeScreening: model.negativeScreening?.result || '--',
-            counterpartyNegativeScreening: model.counterpartyNegativeScreening?.result || '--',
+            negativeScreening: summariseNegativeScreening(model.negativeScreening),
+            counterpartyNegativeScreening: summariseNegativeScreening(model.counterpartyNegativeScreening),
             customerRiskAssessment: craToString(model.customerRiskAssessment),
         }
     }

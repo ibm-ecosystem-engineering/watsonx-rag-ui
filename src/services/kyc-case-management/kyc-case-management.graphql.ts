@@ -34,12 +34,20 @@ const LIST_CASES = gql`
                 countryOfResidence
             }
             negativeScreening {
-                result
+                summary
                 error
+                totalScreened
+                unrelatedNewsCount
+                nonNegativeNewsCount
+                negativeNewsCount
             }
             counterpartyNegativeScreening {
-                result
+                summary
                 error
+                totalScreened
+                unrelatedNewsCount
+                nonNegativeNewsCount
+                negativeNewsCount
             }
             customerRiskAssessment {
                 score
@@ -75,12 +83,20 @@ const CASES_SUBSCRIPTION = gql`
                 countryOfResidence
             }
             negativeScreening {
-                result
+                summary
                 error
+                totalScreened
+                unrelatedNewsCount
+                nonNegativeNewsCount
+                negativeNewsCount
             }
             counterpartyNegativeScreening {
-                result
+                summary
                 error
+                totalScreened
+                unrelatedNewsCount
+                nonNegativeNewsCount
+                negativeNewsCount
             }
             customerRiskAssessment {
                 score
@@ -116,12 +132,68 @@ const GET_CASE = gql`
                 countryOfResidence
             }
             negativeScreening {
-                result
+                summary
                 error
+                totalScreened
+                unrelatedNewsCount
+                nonNegativeNewsCount
+                negativeNewsCount
+                unrelatedNews {
+                    date
+                    title
+                    link
+                    summary
+                    negativeNewsTopics
+                    hasNegativeNews
+                }
+                nonNegativeNews {
+                    date
+                    title
+                    link
+                    summary
+                    negativeNewsTopics
+                    hasNegativeNews
+                }
+                negativeNews {
+                    date
+                    title
+                    link
+                    summary
+                    negativeNewsTopics
+                    hasNegativeNews
+                }
             }
             counterpartyNegativeScreening {
-                result
+                summary
                 error
+                totalScreened
+                unrelatedNewsCount
+                nonNegativeNewsCount
+                negativeNewsCount
+                unrelatedNews {
+                    date
+                    title
+                    link
+                    summary
+                    negativeNewsTopics
+                    hasNegativeNews
+                }
+                nonNegativeNews {
+                    date
+                    title
+                    link
+                    summary
+                    negativeNewsTopics
+                    hasNegativeNews
+                }
+                negativeNews {
+                    date
+                    title
+                    link
+                    summary
+                    negativeNewsTopics
+                    hasNegativeNews
+                }
             }
             customerRiskAssessment {
                 score
@@ -157,11 +229,11 @@ const CREATE_CASE = gql`
                 countryOfResidence
             }
             negativeScreening {
-                result
+                summary
                 error
             }
             counterpartyNegativeScreening {
-                result
+                summary
                 error
             }
             customerRiskAssessment {
@@ -198,11 +270,11 @@ const ADD_DOCUMENT_TO_CASE = gql`
                 countryOfResidence
             }
             negativeScreening {
-                result
+                summary
                 error
             }
             counterpartyNegativeScreening {
-                result
+                summary
                 error
             }
             customerRiskAssessment {
@@ -239,11 +311,11 @@ const APPROVE_CASE = gql`
                 countryOfResidence
             }
             negativeScreening {
-                result
+                summary
                 error
             }
             counterpartyNegativeScreening {
-                result
+                summary
                 error
             }
             customerRiskAssessment {
@@ -280,11 +352,11 @@ const REVIEW_CASE = gql`
                 countryOfResidence
             }
             negativeScreening {
-                result
+                summary
                 error
             }
             counterpartyNegativeScreening {
-                result
+                summary
                 error
             }
             customerRiskAssessment {
@@ -331,11 +403,11 @@ const REMOVE_DOCUMENT_FROM_CASE = gql`
                 countryOfResidence
             }
             negativeScreening {
-                result
+                summary
                 error
             }
             counterpartyNegativeScreening {
-                result
+                summary
                 error
             }
             customerRiskAssessment {
@@ -372,11 +444,11 @@ const PROCESS_CASE = gql`
                 countryOfResidence
             }
             negativeScreening {
-                result
+                summary
                 error
             }
             counterpartyNegativeScreening {
-                result
+                summary
                 error
             }
             customerRiskAssessment {

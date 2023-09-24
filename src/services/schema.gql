@@ -109,7 +109,26 @@ type Mutation {
 """Negative screening"""
 type NegativeScreening {
   error: String
-  result: String!
+  negativeNews: [NewsItem!]!
+  negativeNewsCount: Float!
+  nonNegativeNews: [NewsItem!]!
+  nonNegativeNewsCount: Float!
+  subject: String!
+  summary: String!
+  totalScreened: Float!
+  unrelatedNews: [NewsItem!]!
+  unrelatedNewsCount: Float!
+}
+
+type NewsItem {
+  date: String!
+  hasNegativeNews: Boolean
+  link: String!
+  negativeNewsTopics: [String!]
+  snippet: String!
+  source: String!
+  summary: String
+  title: String!
 }
 
 """KYC Person"""
@@ -134,6 +153,9 @@ type Query {
   listEntityTypes: [FormOption!]!
   listIndustryTypes: [FormOption!]!
   listQuestions: [DataExtractionQuestion!]!
+  screenNews(country: String, dateOfBirth: String, name: String!): NegativeScreening!
+  summarize(name: String!): SummaryResult!
+  validateUrl(url: String!): ValidatedUrl!
 }
 
 input ReviewCaseInput {
@@ -146,4 +168,13 @@ input ReviewCaseInput {
 type Subscription {
   extractDataObservable(customer: String!, questions: [DataExtractionQuestionIdInput!]!): [DataExtractionResult!]!
   subscribeToCases: [KycCase!]!
+}
+
+type SummaryResult {
+  result: String!
+}
+
+type ValidatedUrl {
+  isValid: Boolean!
+  link: String!
 }

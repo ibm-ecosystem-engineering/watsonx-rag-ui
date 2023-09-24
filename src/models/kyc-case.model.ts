@@ -29,13 +29,33 @@ export interface DocumentModel extends DocumentInputModel {
     content: Buffer;
 }
 
+
 export interface NegativeScreeningModel {
-    result: string;
+    subject: string;
+    totalScreened: number;
+    negativeNewsCount: number;
+    negativeNews: NewsItemModel[];
+    nonNegativeNewsCount: number;
+    nonNegativeNews: NewsItemModel[];
+    unrelatedNewsCount: number;
+    unrelatedNews: NewsItemModel[];
+    summary: string;
     error?: string;
 }
 
+export interface NewsItemModel {
+    title: string;
+    link: string;
+    source: string;
+    snippet: string;
+    date: string;
+    negativeNewsTopics?: string[];
+    hasNegativeNews?: boolean;
+    summary?: string;
+}
+
 export const isNegativeScreeningModel = (val: unknown): val is NegativeScreeningModel => {
-    return !!val && !!(val as NegativeScreeningModel).result
+    return !!val && !!(val as NegativeScreeningModel).summary
 }
 
 export interface CustomerRiskAssessmentModel {
