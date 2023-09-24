@@ -1,11 +1,14 @@
 
 // eslint-disable-next-line @typescript-eslint/ban-ts-comment
 // @ts-ignore
-import React from 'react';
+import React, {CSSProperties} from 'react';
 
 export interface ListItemsProps {
     unordered?: boolean;
     items: string[]
+    className?: string;
+    style?: CSSProperties;
+    itemStyle?: CSSProperties;
 }
 
 export const ListItems: React.FunctionComponent<ListItemsProps> = (props: ListItemsProps) => {
@@ -15,14 +18,14 @@ export const ListItems: React.FunctionComponent<ListItemsProps> = (props: ListIt
 
     if (props.unordered) {
         return (
-            <ul>
-                {props.items.map((item, index) => (<li key={index}>{item}</li>))}
+            <ul className={props.className} style={props.style}>
+                {props.items.map((item, index) => (<li key={index} style={props.itemStyle}>{item}</li>))}
             </ul>
         )
     } else {
         return (
-            <ol>
-                {props.items.map((item, index) => (<li key={index}>{item}</li>))}
+            <ol className={props.className} style={props.style}>
+                {props.items.map((item, index) => (<li key={index} style={props.itemStyle}>{item}</li>))}
             </ol>
         )
     }

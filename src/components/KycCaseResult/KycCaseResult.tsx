@@ -46,8 +46,8 @@ export const KycCaseResult: React.FunctionComponent<KycCaseResultProps> = (props
             <>
                 <CustomerRisk customerRisk={props.currentCase.customerRiskAssessment} />
                 <KycSummary kycSummary={props.currentCase.caseSummary} />
-                <NegativeNews type="Party" news={props.currentCase.negativeScreening} />
-                <NegativeNews type="Counterparty" news={props.currentCase.counterpartyNegativeScreening} />
+                <NegativeNews type="Party" news={props.currentCase.negativeScreening} subject={props.currentCase.customer.name} />
+                <NegativeNews type="Counterparty" news={props.currentCase.counterpartyNegativeScreening} subject={props.currentCase.counterparty.name} />
             </>
         )
     }
@@ -62,8 +62,8 @@ export const KycCaseResult: React.FunctionComponent<KycCaseResultProps> = (props
             </TabList>
             <TabPanels>
                 <TabPanel><CustomerRisk hideTitle={true} customerRisk={props.currentCase.customerRiskAssessment} /></TabPanel>
-                <TabPanel><NegativeNews hideTitle={true} type="Party" news={props.currentCase.negativeScreening} /></TabPanel>
-                <TabPanel><NegativeNews hideTitle={true} type="Counterparty" news={props.currentCase.counterpartyNegativeScreening} /></TabPanel>
+                <TabPanel><NegativeNews hideTitle={true} type="Party" news={props.currentCase.negativeScreening} subject={props.currentCase.customer.name} /></TabPanel>
+                <TabPanel><NegativeNews hideTitle={true} type="Counterparty" news={props.currentCase.counterpartyNegativeScreening} subject={props.currentCase.counterparty.name} /></TabPanel>
                 <TabPanel><KycSummary hideTitle={true} kycSummary={props.currentCase.caseSummary} /></TabPanel>
             </TabPanels>
         </Tabs>

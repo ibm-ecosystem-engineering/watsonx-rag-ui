@@ -34,6 +34,7 @@ const LIST_CASES = gql`
                 countryOfResidence
             }
             negativeScreening {
+                subject
                 summary
                 error
                 totalScreened
@@ -42,6 +43,7 @@ const LIST_CASES = gql`
                 negativeNewsCount
             }
             counterpartyNegativeScreening {
+                subject
                 summary
                 error
                 totalScreened
