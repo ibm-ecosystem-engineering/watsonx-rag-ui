@@ -45,7 +45,7 @@ const craToString = (riskAssessment?: CustomerRiskAssessmentModel) => {
 }
 
 const summariseNegativeScreening = (news?: NegativeScreeningModel): string => {
-    if (!news?.summary) {
+    if ((news?.totalScreened || 0) === 0) {
         return '--'
     }
 
