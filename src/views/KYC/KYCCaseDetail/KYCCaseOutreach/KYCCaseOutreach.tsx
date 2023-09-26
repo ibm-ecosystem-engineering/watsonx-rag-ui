@@ -111,7 +111,7 @@ export const KYCCaseOutreach: React.FunctionComponent<KYCCaseReviewProps> = (pro
                     multiple={true}
                     disabled={false}
                     iconDescription="Delete file"
-                    onChange={handleFileUploaderChange(props.currentCase.id, handleDocuments, setFileStatus, 'data-extraction')}
+                    onChange={handleFileUploaderChange(props.currentCase.id, handleDocuments, setFileStatus, 'kyc-case')}
                     name="" />
                 <div><Button kind="tertiary" onClick={handleCancel}>Cancel</Button> <Button type="submit">Submit</Button></div>
             </Stack>
