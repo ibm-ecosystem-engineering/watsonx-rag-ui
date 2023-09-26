@@ -14,7 +14,7 @@ export class MenuConfigService implements MenuConfigApi {
             negativeScreeningApiUrl: '',
             customerRiskAssessmentApiUrl: '',
             kycCaseSummaryApiUrl: '',
-            kycSummarizationUrl: 'https://ey-kyc-summary.17lppvsmkk7n.us-south.codeengine.appdomain.cloud/',
+            kycSummarizationUrl: 'https://kyc-summary-ui.177i1pavvk8r.us-south.codeengine.appdomain.cloud/',
         }
     }
 }
