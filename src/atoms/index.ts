@@ -6,3 +6,4 @@ export * from './data-extraction.atom';
 export * from './dashboard.atom';
 export * from './current-user.atom';
 export * from './navigation.atom';
+export * from './kyc-case-summary.atom';

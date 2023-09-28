@@ -14,6 +14,7 @@ import {kycCaseManagementApi} from "../../../../services";
 export interface KYCCasePendingProps {
     currentCase: KycCaseModel;
     returnUrl: string;
+    title?: string;
 }
 
 export const KYCCasePending: React.FunctionComponent<KYCCasePendingProps> = (props: KYCCasePendingProps) => {
@@ -33,7 +34,7 @@ export const KYCCasePending: React.FunctionComponent<KYCCasePendingProps> = (pro
 
     return (
             <Stack gap={5}>
-                <h2>Pending information</h2>
+                <h2>{props.title ? props.title : 'Pending information'}</h2>
                 <KycCaseOverview currentCase={props.currentCase} />
                 <DocumentList documents={props.currentCase.documents} />
                 <KycCaseResult currentCase={props.currentCase} />

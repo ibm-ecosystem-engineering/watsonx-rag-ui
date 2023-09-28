@@ -1,6 +1,6 @@
 import {FileUploadApi} from "./file-upload.api";
 import {kycCaseManagementApi, KycCaseManagementApi} from "../kyc-case-management";
-import {DocumentModel} from "../../models";
+import {DocumentModel, DocumentStatusModel} from "../../models";
 
 export class FileUploadMock implements FileUploadApi {
     service: KycCaseManagementApi;
@@ -13,6 +13,10 @@ export class FileUploadMock implements FileUploadApi {
 
         const content = Buffer.from('')
         return this.service.addDocumentToCase(caseId, name, {content})
+    }
+
+    async listFiles(): Promise<DocumentStatusModel[]> {
+        return []
     }
 
 }

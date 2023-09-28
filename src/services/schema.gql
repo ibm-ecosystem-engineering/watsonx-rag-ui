@@ -67,6 +67,13 @@ input DocumentInput {
   path: String!
 }
 
+type DocumentOutput {
+  id: ID!
+  name: String
+  path: String
+  status: String
+}
+
 """Object representing a key/value pair"""
 type FormOption {
   text: String!
@@ -92,16 +99,28 @@ type KycCase {
   status: String!
 }
 
+type KycCaseChangeEvent {
+  caseId: ID!
+  event: String!
+}
+
 """KYC case summary"""
 type KycCaseSummary {
   error: String
   summary: String!
 }
 
+input ListDocumentInput {
+  context: String
+  statuses: [String!]
+}
+
 type Mutation {
   addDocumentToCase(caseId: ID!, documentName: String!, documentUrl: String!): KycCase!
   approveCase(case: ApproveCaseInput!): KycCase!
   createCase(customer: CustomerInput!): KycCase!
+  deleteCase(id: ID!): KycCase!
+  deleteDocument(id: ID!): Document!
   processCase(id: ID!): KycCase!
   removeDocumentFromCase(caseId: ID!, documentId: ID!): KycCase!
   reviewCase(case: ReviewCaseInput!): KycCase!
@@ -151,7 +170,9 @@ type Query {
   helloWorld: Greeting!
   listCases: [KycCase!]!
   listCountries: [FormOption!]!
+  listDocuments: [Document!]!
   listEntityTypes: [FormOption!]!
+  listFiles(input: ListDocumentInput): [DocumentOutput!]!
   listIndustryTypes: [FormOption!]!
   listQuestions: [DataExtractionQuestion!]!
   screenNews(country: String, dateOfBirth: String, name: String!): NegativeScreening!
@@ -168,7 +189,9 @@ input ReviewCaseInput {
 
 type Subscription {
   extractDataObservable(customer: String!, questions: [DataExtractionQuestionIdInput!]!): [DataExtractionResult!]!
+  subscribeToCaseChanges: KycCaseChangeEvent!
   subscribeToCases: [KycCase!]!
+  watchCase(id: ID!): KycCase!
 }
 
 type SummaryResult {

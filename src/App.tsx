@@ -22,6 +22,7 @@ import {
     RTCQC,
     Utilities
 } from "./views";
+import {KycSummarizeNative} from "./views/KycSummarizeNative";
 
 function App() {
     const setCurrentUser = useSetAtom(currentUserAtom);
@@ -42,6 +43,7 @@ function App() {
         {title: 'Customer Risk', href: '/customer-risk', element: <CustomerRisk />},
         {title: 'RTC - QC', href: '/rtc-qc', element: <RTCQC />},
         {title: 'KYC Summarization', href: '/kyc-summarization', element: <KycSummarize />},
+        {title: 'KYC Summarize', href: '/kyc-summarize', excludeFromMenu: true, element: <KycSummarizeNative returnUrl="/kyc-summarization" />},
         {
             title: 'Utilities',
             href: '/utilities',

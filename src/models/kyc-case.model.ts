@@ -29,6 +29,11 @@ export interface DocumentModel extends DocumentInputModel {
     content: Buffer;
 }
 
+export interface DocumentStatusModel extends Partial<DocumentInputModel> {
+    id: string;
+    status?: string;
+}
+
 
 export interface NegativeScreeningModel {
     subject: string;
