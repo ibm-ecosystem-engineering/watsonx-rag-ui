@@ -47,6 +47,22 @@ const createEmptyDataExtractionValues = (questionLoadable: Loadable<Promise<Data
 }
 
 export const DataExtraction: React.FunctionComponent<DataExtractionProps> = () => {
+
+    const webChatConfig: WebChatConfig = {
+        integrationID: '76f5a344-3d6e-4e87-89d4-ec4fb39ee08a', // The ID of this integration.
+        region: 'us-south', // The region your integration is hosted in.
+        serviceInstanceID: '683c39a0-98db-4651-b97d-49f770fb058c', // The ID of your service instance.
+    }
+
+    return (
+        <>
+            <WebChatContainer config={webChatConfig} />
+            <DataExtractionInternal />
+        </>
+    )
+}
+
+const DataExtractionInternal: React.FunctionComponent<DataExtractionProps> = () => {
     const questionLoadable = useAtomValue(dataExtractionQuestionAtomLoadable)
     const [dataExtraction, setDataExtraction] = useState<DataExtractionValues>(createEmptyDataExtractionValues(questionLoadable))
     const [fileStatus, setFileStatus] = useState<'edit' | 'complete' | 'uploading'>('edit')
@@ -114,12 +130,6 @@ export const DataExtraction: React.FunctionComponent<DataExtractionProps> = () =
         setResults(Promise.resolve([]))
     }
 
-    const webChatConfig: WebChatConfig = {
-        integrationID: '76f5a344-3d6e-4e87-89d4-ec4fb39ee08a', // The ID of this integration.
-        region: 'us-south', // The region your integration is hosted in.
-        serviceInstanceID: '683c39a0-98db-4651-b97d-49f770fb058c', // The ID of your service instance.
-    }
-
     return (
         <div>
         <Form onSubmit={handleSubmit}>
@@ -170,7 +180,6 @@ export const DataExtraction: React.FunctionComponent<DataExtractionProps> = () =
                 <div><Button kind="tertiary" onClick={handleReset}>Reset</Button> <Button type="submit">Submit</Button></div>
             </Stack>
         </Form>
-            <WebChatContainer config={webChatConfig} />
             <DataExtractionResults />
         </div>
     )
