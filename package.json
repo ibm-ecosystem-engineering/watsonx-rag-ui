@@ -18,7 +18,9 @@
     "@ibm-watson/assistant-web-chat-react": "^1.0.4",
     "dayjs": "^1.11.10",
     "graphql-ws": "^5.14.1",
+    "ibmcloud-appid-js": "^1.0.1",
     "jotai": "^2.4.3",
+    "js-cookie": "^3.0.5",
     "optional-js": "^2.3.0",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
@@ -29,6 +31,7 @@
   },
   "devDependencies": {
     "@types/carbon__icons-react": "^11.26.1",
+    "@types/js-cookie": "^3.0.4",
     "@types/node": "^20.7.1",
     "@types/react": "^18.2.23",
     "@types/react-dom": "^18.2.8",

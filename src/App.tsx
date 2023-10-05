@@ -1,13 +1,13 @@
 // eslint-disable-next-line @typescript-eslint/ban-ts-comment
 // @ts-ignore
-import React from "react";
+import React, {ReactNode} from "react";
 import {Route, Routes} from "react-router-dom";
 import {Notification, Search, User} from "@carbon/icons-react";
-import {useAtomValue, useSetAtom, useAtom} from "jotai";
+import {useAtom, useAtomValue} from "jotai";
 import {Loading} from "@carbon/react";
 
 import './App.css'
-import {activeItemAtom, currentUserAtom, currentUserAtomLoadable} from "./atoms";
+import {activeItemAtom, currentUserAtomLoadable} from "./atoms";
 import {NotFound, UIShell} from "./components";
 import {MenuLinksModel, NavigationModel} from "./models";
 import {
@@ -18,39 +18,43 @@ import {
     KYCCaseDetail,
     KYCCaseList,
     KycSummarize,
-    Login,
     RTCQC,
-    Utilities
+    Utilities,
+    Welcome
 } from "./views";
 import {KycSummarizeNative} from "./views/KycSummarizeNative";
 
 function App() {
-    const setCurrentUser = useSetAtom(currentUserAtom);
-    const loadable = useAtomValue(currentUserAtomLoadable)
-    const [activeItem, setActiveItem] = useAtom(activeItemAtom)
+    const loadable = useAtomValue(currentUserAtomLoadable);
+    const [activeItem, setActiveItem] = useAtom(activeItemAtom);
+
+    const checkAuth = (element: ReactNode): ReactNode => {
+        return element
+    }
 
     const menuLinks: MenuLinksModel[] = [
-        {title: 'Dashboard', href: '/', element: <Dashboard />},
+        {title: 'Welcome', href: '/', element: <Welcome />},
+        {title: 'Dashboard', href: '/secure/dashboard', element: <Dashboard />},
         {
             title: 'FinCrime',
-            href: '/fincrime',
+            href: '/secure/fincrime',
             element: <KYC />,
             subMenus: [
-                {title: 'KYC Case List', href: '', element: <KYCCaseList basePath="/fincrime" /> },
-                {title: 'KYC Case Detail', href: 'case/:id', element: <KYCCaseDetail basePath="/fincrime" /> }
+                {title: 'KYC Case List', href: '', element: <KYCCaseList basePath="/secure/fincrime" /> },
+                {title: 'KYC Case Detail', href: 'case/:id', element: <KYCCaseDetail basePath="/secure/fincrime" /> }
             ]
         },
-        {title: 'Customer Risk', href: '/customer-risk', element: <CustomerRisk />},
-        {title: 'RTC - QC', href: '/rtc-qc', element: <RTCQC />},
-        {title: 'KYC Summarization', href: '/kyc-summarization', element: <KycSummarize />},
-        {title: 'KYC Summarize', href: '/kyc-summarize', excludeFromMenu: true, element: <KycSummarizeNative returnUrl="/kyc-summarization" />},
+        {title: 'Customer Risk', href: '/secure/customer-risk', element: <CustomerRisk /> },
+        {title: 'RTC - QC', href: '/secure/rtc-qc', element: <RTCQC /> },
+        {title: 'KYC Summarization', href: '/secure/kyc-summarization', element: <KycSummarize /> },
+        {title: 'KYC Summarize', href: '/secure/kyc-summarize', excludeFromMenu: true, element: <KycSummarizeNative returnUrl="/secure/kyc-summarization" /> },
         {
             title: 'Utilities',
-            href: '/utilities',
+            href: '/secure/utilities',
             element: <KYC />,
             subMenus: [
-                {title: 'Utilities', href: '', element: <Utilities />},
-                {title: 'Data Extraction', href: 'data-extraction', element: <DataExtraction />},
+                {title: 'Utilities', href: '', element: <Utilities /> },
+                {title: 'Data Extraction', href: 'data-extraction', element: <DataExtraction /> },
             ]
         },
     ]
@@ -70,7 +74,7 @@ function App() {
         return menuLinks.map(link => {
                 if (link.subMenus && link.subMenus.length > 0) {
                     return (
-                        <Route path={link.href} element={link.element} key={link.href}>
+                        <Route path={link.href} element={checkAuth(link.element)} key={link.href}>
                             {renderMenuLinks(link.subMenus)}
                         </Route>
                     )
@@ -78,12 +82,12 @@ function App() {
 
                 if (!link.href) {
                     return (
-                        <Route index element={link.element} key="index" />
+                        <Route index element={checkAuth(link.element)} key="index" />
                     )
                 }
 
                 return (
-                    <Route path={link.href} element={link.element} key={link.href} />
+                    <Route path={link.href} element={checkAuth(link.element)} key={link.href} />
                 )
             })
     }
@@ -91,12 +95,12 @@ function App() {
     if (loadable.state === 'loading' || loadable.state === 'hasError') {
         return (<Loading active={true} description="Login loading" id="login-loading" withOverlay={true} />)
     }
-
-    const currentUser = loadable.data;
-
-    if (!currentUser) {
-        return (<Login setCurrentUser={setCurrentUser} />)
-    }
+    //
+    // const currentUser = loadable.data;
+    //
+    // if (!currentUser) {
+    //     return (<Login setCurrentUser={setCurrentUser} />)
+    // }
 
     return (
         <div>

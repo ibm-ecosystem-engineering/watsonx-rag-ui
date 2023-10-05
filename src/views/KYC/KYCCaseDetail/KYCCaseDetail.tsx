@@ -9,10 +9,9 @@ import './KYCCaseDetail.scss';
 import {KYCCaseNew} from "./KYCCaseNew";
 import {KYCCasePending} from "./KYCCasePending";
 import {KYCCaseReview} from "./KYCCaseReview";
-import {KYCCaseCompleted} from "./KYCCaseCompleted";
+import {KYCCaseOutreach} from "./KYCCaseOutreach";
 import {selectedKycCaseAtom, selectedKycCaseAtomLoadable} from "../../../atoms";
 import {KycCaseModel} from "../../../models";
-import {KYCCaseOutreach} from "./KYCCaseOutreach";
 
 export interface KYCCaseDetailProps {
     basePath: string;
