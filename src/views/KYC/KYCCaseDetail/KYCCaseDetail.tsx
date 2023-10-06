@@ -70,7 +70,7 @@ export const KYCCaseDetail: React.FunctionComponent<KYCCaseDetailProps> = (props
         return (<KYCCasePending currentCase={selectedCase} returnUrl={props.basePath} />)
     }
 
-    if (selectedCase.status === 'Closed') {
+    if (selectedCase.status === 'Closed' || selectedCase.status === 'Completed') {
         return (<KYCCasePending title="Completed" currentCase={selectedCase} returnUrl={props.basePath} />)
     }
 
