@@ -3,3 +3,11 @@
 
 // Emit the flex-grid styles
 @include grid.flex-grid();
+
+.root, #root {
+  margin: 0 auto !important;
+}
+
+.content {
+  margin-left: 5px !important;
+}

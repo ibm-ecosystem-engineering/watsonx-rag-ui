@@ -3,29 +3,15 @@
 import React, {ReactNode} from "react";
 import {Route, Routes} from "react-router-dom";
 import {Notification, Search, User} from "@carbon/icons-react";
-import {useAtom, useAtomValue} from "jotai";
-import {Loading} from "@carbon/react";
+import {useAtom} from "jotai";
 
 import './App.css'
-import {activeItemAtom, currentUserAtomLoadable} from "./atoms";
+import {activeItemAtom} from "./atoms";
 import {NotFound, UIShell} from "./components";
 import {MenuLinksModel, NavigationModel} from "./models";
-import {
-    CustomerRisk,
-    Dashboard,
-    DataExtraction,
-    KYC,
-    KYCCaseDetail,
-    KYCCaseList,
-    KycSummarize,
-    RTCQC,
-    Utilities,
-    Welcome
-} from "./views";
-import {KycSummarizeNative} from "./views/KycSummarizeNative";
+import {QueryView} from "./views";
 
 function App() {
-    const loadable = useAtomValue(currentUserAtomLoadable);
     const [activeItem, setActiveItem] = useAtom(activeItemAtom);
 
     const checkAuth = (element: ReactNode): ReactNode => {
@@ -33,30 +19,7 @@ function App() {
     }
 
     const menuLinks: MenuLinksModel[] = [
-        {title: 'Welcome', href: '/', element: <Welcome />},
-        {title: 'Dashboard', href: '/secure/dashboard', element: <Dashboard />},
-        {
-            title: 'FinCrime',
-            href: '/secure/fincrime',
-            element: <KYC />,
-            subMenus: [
-                {title: 'KYC Case List', href: '', element: <KYCCaseList basePath="/secure/fincrime" /> },
-                {title: 'KYC Case Detail', href: 'case/:id', element: <KYCCaseDetail basePath="/secure/fincrime" /> }
-            ]
-        },
-        {title: 'Customer Risk', href: '/secure/customer-risk', element: <CustomerRisk /> },
-        {title: 'RTC - QC', href: '/secure/rtc-qc', element: <RTCQC /> },
-        {title: 'KYC Summarization', href: '/secure/kyc-summarization', element: <KycSummarize /> },
-        {title: 'KYC Summarize', href: '/secure/kyc-summarize', excludeFromMenu: true, element: <KycSummarizeNative returnUrl="/secure/kyc-summarization" /> },
-        {
-            title: 'Utilities',
-            href: '/secure/utilities',
-            element: <KYC />,
-            subMenus: [
-                {title: 'Utilities', href: '', element: <Utilities /> },
-                {title: 'Data Extraction', href: 'data-extraction', element: <DataExtraction /> },
-            ]
-        },
+        {title: 'Query', href: '/', element: <QueryView />},
     ]
 
     const navigation: NavigationModel = {
@@ -65,9 +28,7 @@ function App() {
             {title: 'Notifications', action: (<Notification size={20} />)},
             {title: 'User Profile', action: (<User size={20} />)}
         ],
-        sideNav: menuLinks
-            .filter(link => !link.excludeFromMenu)
-            .map(link => ({title: link.title, href: link.href}))
+        sideNav: []
     }
 
     const renderMenuLinks = (menuLinks: MenuLinksModel[]) => {
@@ -91,16 +52,6 @@ function App() {
                 )
             })
     }
-
-    if (loadable.state === 'loading' || loadable.state === 'hasError') {
-        return (<Loading active={true} description="Login loading" id="login-loading" withOverlay={true} />)
-    }
-    //
-    // const currentUser = loadable.data;
-    //
-    // if (!currentUser) {
-    //     return (<Login setCurrentUser={setCurrentUser} />)
-    // }
 
     return (
         <div>

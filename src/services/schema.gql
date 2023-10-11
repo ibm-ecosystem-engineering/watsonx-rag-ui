@@ -2,82 +2,49 @@
 # THIS FILE WAS AUTOMATICALLY GENERATED (DO NOT MODIFY)
 # ------------------------------------------------------
 
-input ApproveCaseInput {
-  customerOutreach: String!
-  documents: [DocumentInput!]!
-  id: ID!
-}
-
-"""KYC Customer"""
-type Customer {
-  countryOfResidence: String!
-  entityType: String!
-  industryType: String!
+"""Collection"""
+type Collection {
+  collectionId: String!
+  description: String
   name: String!
-  personalIdentificationNumber: String!
 }
 
-input CustomerInput {
-  countryOfResidence: String!
-  entityType: String!
-  industryType: String!
+input CreateCollectionInput {
+  description: String
   name: String!
-  personalIdentificationNumber: String!
 }
 
-"""Customer risk assessment"""
-type CustomerRiskAssessment {
-  error: String
-  rating: String!
-  score: Float!
-}
-
-"""Data extraction question"""
-type DataExtractionQuestion {
-  id: ID!
-  inScope: Boolean!
-  question: String!
-}
-
-"""Data extraction question input"""
-input DataExtractionQuestionIdInput {
-  id: ID!
-}
-
-"""Data extraction result"""
-type DataExtractionResult {
-  expectedResponse: String!
-  id: ID!
-  inScope: Boolean!
-  prompt: String!
-  question: String!
-  watsonxResponse: String!
-}
-
-"""KYC Document"""
+"""Document"""
 type Document {
-  id: ID!
-  name: String!
-  path: String!
-}
-
-input DocumentInput {
-  id: ID!
-  name: String!
-  path: String!
-}
-
-type DocumentOutput {
-  id: ID!
-  name: String
+  documentId: String!
+  filename: String!
   path: String
-  status: String
+  status: String!
 }
 
-"""Object representing a key/value pair"""
-type FormOption {
-  text: String!
+type DocumentDetail {
+  metadata: [DocumentMetadata!]
+  pageContent: String!
+}
+
+type DocumentMetadata {
+  key: String!
   value: String!
+}
+
+input GenerateInput {
+  collectionId: String
+  decoding_method: String
+  max_new_tokens: Float
+  min_new_tokens: Float
+  modelId: String
+  question: String!
+  repetition_penalty: Float
+}
+
+type GenerateResultGraphql {
+  generatedText: String!
+  question: String!
 }
 
 """greeting"""
@@ -85,120 +52,43 @@ type Greeting {
   greeting: String!
 }
 
-"""KYC Case"""
-type KycCase {
-  caseSummary: KycCaseSummary
-  counterparty: Person
-  counterpartyNegativeScreening: NegativeScreening
-  customer: Customer!
-  customerOutreach: String
-  customerRiskAssessment: CustomerRiskAssessment
+"""Collections list"""
+type ListCollections {
+  collections: [Collection!]!
+}
+
+"""Documents list"""
+type ListDocuments {
+  count: Float!
   documents: [Document!]!
-  id: ID!
-  negativeScreening: NegativeScreening
-  status: String!
 }
 
-type KycCaseChangeEvent {
-  caseId: ID!
-  event: String!
-}
-
-"""KYC case summary"""
-type KycCaseSummary {
-  error: String
-  summary: String!
-}
-
-input ListDocumentInput {
-  context: String
+input ListDocumentsInput {
+  collectionId: String
+  count: Float
   statuses: [String!]
 }
 
 type Mutation {
-  addDocumentToCase(caseId: ID!, documentName: String!, documentUrl: String!): KycCase!
-  approveCase(case: ApproveCaseInput!): KycCase!
-  createCase(customer: CustomerInput!): KycCase!
-  deleteCase(id: ID!): KycCase!
-  deleteDocument(id: ID!): Document!
-  processCase(id: ID!): KycCase!
-  removeDocumentFromCase(caseId: ID!, documentId: ID!): KycCase!
-  reviewCase(case: ReviewCaseInput!): KycCase!
-}
-
-"""Negative screening"""
-type NegativeScreening {
-  error: String
-  negativeNews: [NewsItem!]!
-  negativeNewsCount: Float!
-  nonNegativeNews: [NewsItem!]!
-  nonNegativeNewsCount: Float!
-  subject: String!
-  summary: String!
-  totalScreened: Float!
-  unrelatedNews: [NewsItem!]!
-  unrelatedNewsCount: Float!
-}
-
-type NewsItem {
-  date: String!
-  hasNegativeNews: Boolean
-  link: String!
-  negativeNewsTopics: [String!]
-  snippet: String!
-  source: String!
-  summary: String
-  title: String!
-}
-
-"""KYC Person"""
-type Person {
-  countryOfResidence: String!
-  name: String!
-}
-
-input PersonInput {
-  countryOfResidence: String!
-  name: String!
+  createCollection(input: CreateCollectionInput!): Collection!
 }
 
 type Query {
-  extractDataForQuestion(customer: String!, question: DataExtractionQuestionIdInput!): DataExtractionResult!
-  extractDataForQuestions(customer: String!, questions: [DataExtractionQuestionIdInput!]!): [DataExtractionResult!]!
-  getCase(id: ID!): KycCase!
-  getDocument(id: ID!): Document!
+  generate(input: GenerateInput!): GenerateResultGraphql!
   helloWorld: Greeting!
-  listCases: [KycCase!]!
-  listCountries: [FormOption!]!
-  listDocuments: [Document!]!
-  listEntityTypes: [FormOption!]!
-  listFiles(input: ListDocumentInput): [DocumentOutput!]!
-  listIndustryTypes: [FormOption!]!
-  listQuestions: [DataExtractionQuestion!]!
-  screenNews(country: String, dateOfBirth: String, name: String!): NegativeScreening!
-  summarize(name: String!): SummaryResult!
-  validateUrl(url: String!): ValidatedUrl!
+  listCollections: ListCollections!
+  listDocuments(input: ListDocumentsInput!): ListDocuments!
+  query(input: QueryDocumentsInput!): QueryDocuments!
 }
 
-input ReviewCaseInput {
-  counterparty: PersonInput!
-  customerOutreach: String
-  documents: [DocumentInput!]!
-  id: ID!
+type QueryDocuments {
+  count: Float!
+  documents: [DocumentDetail!]!
 }
 
-type Subscription {
-  extractDataObservable(customer: String!, questions: [DataExtractionQuestionIdInput!]!): [DataExtractionResult!]!
-  subscribeToCaseChanges: KycCaseChangeEvent!
-  subscribeToCases: [KycCase!]!
-  watchCase(id: ID!): KycCase!
-}
-
-type SummaryResult {
-  result: String!
-}
-
-type ValidatedUrl {
-  isValid: Boolean!
-  link: String!
+input QueryDocumentsInput {
+  collectionId: String
+  count: Float
+  filter: String
+  naturalLanguageQuery: String!
 }

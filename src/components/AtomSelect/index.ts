@@ -1,1 +1,1 @@
-export * from './AtomSelect';
+export * from './AtomSelect'
