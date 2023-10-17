@@ -1,8 +1,7 @@
-
 // eslint-disable-next-line @typescript-eslint/ban-ts-comment
 // @ts-ignore
 import React, {useState} from 'react';
-import {Button, Column, Form, Grid, Loading, TextInput} from "@carbon/react";
+import {Form, Loading, TextInput} from "@carbon/react";
 
 export interface ChatInputProps {
     state: 'ready' | 'loading' | 'not ready';

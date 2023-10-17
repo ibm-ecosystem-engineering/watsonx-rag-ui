@@ -11,7 +11,7 @@ export interface CollectionDocumentsProps {
     selectedCollection: string;
 }
 
-export const CollectionDocuments: React.FunctionComponent<CollectionDocumentsProps> = (props: CollectionDocumentsProps) => {
+export const CollectionDocuments: React.FunctionComponent<CollectionDocumentsProps> = () => {
     const loadable = useAtomValue(collectionDocumentsLoadable)
 
     if (loadable.state === 'loading') {
