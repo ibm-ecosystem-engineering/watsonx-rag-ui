@@ -2,6 +2,7 @@
 // @ts-ignore
 import React from 'react';
 
+import './ChatResult.scss'
 import {ChatInteractionModel} from "../../../../models";
 
 export interface ChatResultProps {
@@ -14,16 +15,16 @@ interface ChatInteractionProps {
 
 const ChatInteraction: React.FunctionComponent<ChatInteractionProps> = (props: ChatInteractionProps) => {
     return (
-        <div style={{overflow: 'auto', width: '100%', padding: '8px 0'}}>
-            <div style={{width: '100%', textAlign: 'right', paddingBottom: '4px'}}>{props.chatInteraction.question}</div>
-            <div style={{textAlign: 'left', width: '100%'}}>{props.chatInteraction.answer}</div>
+        <div className="interaction">
+            <div style={{marginBottom: '5px', textAlign: "right"}}><div className="question">{props.chatInteraction.question}</div></div>
+            <div style={{textAlign: 'left'}}><div className="answer">{props.chatInteraction.answer}</div></div>
         </div>
     )
 }
 
 export const ChatResult: React.FunctionComponent<ChatResultProps> = (props: ChatResultProps) => {
     return (
-        <div style={{height: '100%', overflow: 'scroll'}}>
+        <div className="chatPane">
             {props.chatInteractions.map((chatInteraction, index) => (<ChatInteraction key={`chat-${index}`} chatInteraction={chatInteraction} />))}
         </div>
     )

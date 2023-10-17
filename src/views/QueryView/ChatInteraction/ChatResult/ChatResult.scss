@@ -1,0 +1,26 @@
+.chatPane {
+  height: 100%;
+  overflow: scroll;
+}
+
+.interaction {
+  overflow: auto;
+  width: 100%;
+  padding: 8px 0;
+}
+
+.question {
+  display: inline-block;
+  border-radius: 25px;
+  background: #73AD21;
+  padding: 20px;
+  text-align: right;
+}
+
+.answer {
+  display: inline-block;
+  border-radius: 25px;
+  background: #0fa3ff;
+  padding: 20px;
+  text-align: left;
+}
